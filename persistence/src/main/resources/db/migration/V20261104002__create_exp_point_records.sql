@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `point_records`
+CREATE TABLE IF NOT EXISTS `exp_point_records`
 (
     id                      BIGINT UNSIGNED     NOT NULL AUTO_INCREMENT    PRIMARY  KEY,
     balance_id              BIGINT UNSIGNED     NOT NULL COMMENT 'point balance ID',
@@ -17,4 +17,4 @@ CREATE TABLE IF NOT EXISTS `point_records`
     updated_by              VARCHAR(30)         NULL COMMENT 'updater'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE INDEX ix_pr_balanceid ON point_records (balance_id);
+CREATE INDEX ix_epr_balanceid ON exp_point_records (balance_id);

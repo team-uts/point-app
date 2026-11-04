@@ -1,6 +1,37 @@
+import com.diffplug.gradle.spotless.SpotlessCheck
+import org.gradle.kotlin.dsl.withType
+
+afterEvaluate {
+    val multiModules = listOf(
+        ":domain",
+        ":shared",
+        ":persistence",
+        ":infra"
+    )
+
+    project.tasks.apply {
+        // depends on submodules test tasks
+        this.withType<Test> {
+            dependsOn(multiModules.map { "$it:test" })
+        }
+
+        // spotless checking for all submodules
+        this.withType<SpotlessCheck> {
+            dependsOn(multiModules.map { "$it:spotlessCheck" })
+        }
+    }
+}
+
 dependencies {
     implementation(project(":domain"))
     implementation(project(":shared"))
     implementation(project(":infra"))
     implementation(project(":persistence"))
+
+    implementation(libs.spring.boot.starter.actuator)
+
+    implementation(libs.google.gson)
+
+    // swagger
+    implementation(libs.springdoc.openapi.webmvc)
 }

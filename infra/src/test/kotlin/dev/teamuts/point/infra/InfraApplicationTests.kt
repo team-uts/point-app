@@ -1,5 +1,10 @@
 package dev.teamuts.point.infra
 
-class InfraApplicationTests {
+import org.junit.jupiter.api.Test
 
+class InfraApplicationTests {
+    @Test
+    fun contextLoads() {
+        println("InfraApplicationTests contextLoads()")
+    }
 }
