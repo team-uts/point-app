@@ -11,9 +11,9 @@ CREATE TABLE IF NOT EXISTS `point_transactions`
     currency                CHAR(3)             NOT NULL COMMENT 'currency type (AUD)',
     pay_transaction_id      VARCHAR(50)         NOT NULL COMMENT 'payment transaction ID',
     payment_type            VARCHAR(32)         NOT NULL COMMENT 'payment type...',
-    created_at              DATETIME(6)         NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at              DATETIME(6)         NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
     created_by              VARCHAR(30)         NOT NULL COMMENT 'creator',
-    updated_at              DATETIME(6)         NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updated_at              DATETIME(6)         NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
     updated_by              VARCHAR(30)         NULL COMMENT 'updater'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

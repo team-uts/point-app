@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS `exp_point_record_mappings`
     exp_point_record_id     BIGINT UNSIGNED     NOT NULL COMMENT 'exp point record ID',
     amount                  DECIMAL(15, 2)      NOT NULL COMMENT 'point amount',
     currency                CHAR(3)             NOT NULL COMMENT 'currency type (AUD)',
-    created_at              DATETIME(6)         NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at              DATETIME(6)         NOT NULL DEFAULT CURRENT_TIMESTAMP(6)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE INDEX ix_eprm_pointtransactionid ON exp_point_record_mappings (point_transaction_id);

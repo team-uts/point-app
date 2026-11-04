@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS `point_templates`
     ext_template_id         VARCHAR(50)         NOT NULL COMMENT 'external point template ID',
     owner_type              VARCHAR(32)         NOT NULL COMMENT 'owner type (CUSTOMER, MERCHANT)',
     is_active               BOOLEAN             NOT NULL COMMENT 'is active (true, false)',
-    issuance_starts_at      DATETIME(6)         NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'issuance start date',
+    issuance_starts_at      DATETIME(6)         NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'issuance start date',
     issuance_ends_at        DATETIME(6)         NOT NULL COMMENT 'issuance end date',
     issuance_amount_type    VARCHAR(32)         NOT NULL COMMENT 'issuance amount type (FIXED, PERCENTAGE)',
     issuance_amount         DECIMAL(15, 2)      NOT NULL COMMENT 'issuance amount (when FIXED)',
@@ -14,9 +14,9 @@ CREATE TABLE IF NOT EXISTS `point_templates`
     expiration_type         VARCHAR(32)         NOT NULL COMMENT 'expiration type (FIXED, YEAR, MONTH, DAY, HOUR)',
     expiration_period       INT                 NULL     COMMENT 'expiration period (when YEAR, MONTH, DAY, HOUR)',
     expires_at              DATETIME(6)         NULL     COMMENT 'expiration date',
-    created_at              DATETIME(6)         NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at              DATETIME(6)         NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
     created_by              VARCHAR(30)         NOT NULL COMMENT 'creator',
-    updated_at              DATETIME(6)         NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updated_at              DATETIME(6)         NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
     updated_by              VARCHAR(30)         NULL COMMENT 'updater'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
