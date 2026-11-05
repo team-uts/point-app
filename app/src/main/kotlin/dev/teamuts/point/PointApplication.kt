@@ -1,4 +1,4 @@
-package dev.teamuts.point.app
+package dev.teamuts.point
 
 import dev.teamuts.point.shared.config.AppModule.APPLICATION_MODULES
 import org.springframework.boot.autoconfigure.SpringBootApplication

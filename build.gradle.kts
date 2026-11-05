@@ -77,8 +77,9 @@ subprojects {
     dependencies {
         implementation(projectLibs.spring.boot.starter.webmvc)
         implementation(projectLibs.spring.tx)
-        implementation("org.jetbrains.kotlin:kotlin-reflect")
+        implementation(projectLibs.kotlin.reflect)
         implementation("tools.jackson.module:jackson-module-kotlin")
+        implementation(projectLibs.kotlin.logging)
 
         testImplementation(projectLibs.spring.boot.starter.webmvc.test)
         testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
