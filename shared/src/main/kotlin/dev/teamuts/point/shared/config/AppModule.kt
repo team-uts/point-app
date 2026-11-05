@@ -1,9 +1,5 @@
 package dev.teamuts.point.shared.config
 
-/**
- * @see SubModule
- * application yaml config name setting
- */
 object AppModule {
     private const val DEFAULT = "application"
     private const val DOMAIN = "application-domain"

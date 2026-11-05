@@ -5,6 +5,9 @@ pluginManagement {
         gradlePluginPortal()
         mavenCentral()
     }
+    plugins {
+        kotlin("kapt") version "2.3.21"
+    }
 }
 
 dependencyResolutionManagement {
