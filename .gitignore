@@ -1,4 +1,7 @@
-HELP.md
+.env.local
+**/main/generated
+.DS_Store
+
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar

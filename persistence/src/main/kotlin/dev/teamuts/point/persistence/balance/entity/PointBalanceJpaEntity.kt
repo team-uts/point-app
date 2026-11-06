@@ -23,6 +23,7 @@ private const val TABLE_ABBR = "pb"
     ],
 )
 class PointBalanceJpaEntity(
+  memberId: Long,
   ownerType: OwnerType,
   amount: BigDecimal,
   currency: Currency,
@@ -35,7 +36,7 @@ class PointBalanceJpaEntity(
     protected set
 
   @Column(name = "member_id", nullable = false, comment = "owner member ID")
-  var memberId: Long = 0L
+  var memberId: Long = memberId
     protected set
 
   @Enumerated(EnumType.STRING)
