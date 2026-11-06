@@ -9,13 +9,13 @@ CREATE TABLE IF NOT EXISTS `point_balance_transactions`
     exp_amount              DECIMAL(15, 2)      NOT NULL COMMENT 'expirable point amount',
     after_balance_amount    DECIMAL(15, 2)      NOT NULL COMMENT 'point balance amount after transaction',
     currency                CHAR(3)             NOT NULL COMMENT 'currency type (AUD)',
-    pay_transaction_id      VARCHAR(50)         NOT NULL COMMENT 'payment transaction ID',
-    payment_type            VARCHAR(32)         NOT NULL COMMENT 'payment type...',
+    pay_transaction_id      VARCHAR(50)         NULL COMMENT 'payment transaction ID',
+    payment_type            VARCHAR(32)         NULL COMMENT 'payment type...',
     created_at              DATETIME(6)         NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
     created_by              VARCHAR(30)         NOT NULL COMMENT 'creator',
     updated_at              DATETIME(6)         NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
     updated_by              VARCHAR(30)         NULL COMMENT 'updater'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE INDEX ix_pt_balanceid_createdat ON point_balance_transactions (balance_id, created_at);
-CREATE INDEX ix_pt_balanceid_transactiontype_createdat ON point_balance_transactions (balance_id, transaction_type, created_at);
+CREATE INDEX ix_pbt_balanceid_createdat ON point_balance_transactions (balance_id, created_at);
+CREATE INDEX ix_pbt_balanceid_transactiontype_createdat ON point_balance_transactions (balance_id, transaction_type, created_at);

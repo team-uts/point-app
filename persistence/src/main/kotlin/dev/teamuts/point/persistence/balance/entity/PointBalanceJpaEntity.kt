@@ -1,6 +1,7 @@
 package dev.teamuts.point.persistence.balance.entity
 
 import dev.teamuts.point.domain.balance.constant.OwnerType
+import dev.teamuts.point.domain.balance.constant.PointBalanceStatus
 import dev.teamuts.point.domain.common.constant.Currency
 import dev.teamuts.point.persistence.common.entity.BaseAuditableEntity
 import dev.teamuts.point.persistence.common.entity.EntityMetadata.Companion.PREFIX_UNIQUE
@@ -25,6 +26,7 @@ class PointBalanceJpaEntity(
   ownerType: OwnerType,
   amount: BigDecimal,
   currency: Currency,
+  status: PointBalanceStatus,
 ) : BaseAuditableEntity() {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,16 +38,33 @@ class PointBalanceJpaEntity(
   var memberId: Long = 0L
     protected set
 
+  @Enumerated(EnumType.STRING)
   @Column(name = "owner_type", nullable = false, comment = "owner type")
   var ownerType: OwnerType = ownerType
     protected set
 
-  @Column(name = "amount", nullable = false, comment = "point balance amount")
+  @Column(
+    name = "amount",
+    nullable = false,
+    precision = 15,
+    scale = 2,
+    comment = "point balance amount",
+  )
   var amount: BigDecimal = amount
     protected set
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "currency", nullable = false, length = 3, comment = "currency type")
+  @Column(
+    name = "currency",
+    nullable = false,
+    columnDefinition = "CHAR(3)",
+    comment = "currency type",
+  )
   var currency: Currency = currency
+    protected set
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "status", nullable = false, comment = "point balance status")
+  var status: PointBalanceStatus = status
     protected set
 }
