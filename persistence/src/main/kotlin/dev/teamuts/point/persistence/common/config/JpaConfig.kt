@@ -6,6 +6,8 @@ import dev.teamuts.point.persistence.common.constant.JpaConstants.APP_ENTITY_MAN
 import dev.teamuts.point.persistence.common.constant.JpaConstants.APP_JPA_QUERY_FACTORY
 import dev.teamuts.point.shared.data.TransactionConstants.APP_TRANSACTION_MANAGER
 import jakarta.persistence.EntityManager
+import java.util.*
+import javax.sql.DataSource
 import org.hibernate.cfg.SchemaToolingSettings
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.hibernate.autoconfigure.HibernateProperties
@@ -18,54 +20,53 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter
-import java.util.*
-import javax.sql.DataSource
 
 @Configuration(proxyBeanMethods = false)
 @EnableJpaAuditing
 @EnableJpaRepositories(
-    basePackages = ["dev.teamuts.point.persistence.**.repository"],
-    entityManagerFactoryRef = APP_ENTITY_MANAGER,
-    transactionManagerRef = APP_TRANSACTION_MANAGER
+  basePackages = ["dev.teamuts.point.persistence.**.repository"],
+  entityManagerFactoryRef = APP_ENTITY_MANAGER,
+  transactionManagerRef = APP_TRANSACTION_MANAGER,
 )
 class JpaConfig(
-    private val jpaProperties: JpaProperties,
-    private val hibernateProperties: HibernateProperties
+  private val jpaProperties: JpaProperties,
+  private val hibernateProperties: HibernateProperties,
 ) {
-    companion object {
-        const val SYSTEM = "system"
-    }
+  companion object {
+    const val SYSTEM = "system"
+  }
 
-    @Primary
-    @Bean(APP_ENTITY_MANAGER)
-    fun appEntityManager(
-        @Qualifier(APPLICATION_DATA_SOURCE) applicationDataSource: DataSource
-    ): LocalContainerEntityManagerFactoryBean {
-        val mergedJpaProperties = Properties().apply {
-            this.putAll(jpaProperties.properties)
-            this[SchemaToolingSettings.HBM2DDL_AUTO] = hibernateProperties.ddlAuto
-        }
+  @Primary
+  @Bean(APP_ENTITY_MANAGER)
+  fun appEntityManager(
+    @Qualifier(APPLICATION_DATA_SOURCE) applicationDataSource: DataSource
+  ): LocalContainerEntityManagerFactoryBean {
+    val mergedJpaProperties =
+      Properties().apply {
+        this.putAll(jpaProperties.properties)
+        this[SchemaToolingSettings.HBM2DDL_AUTO] = hibernateProperties.ddlAuto
+      }
 
-        return LocalContainerEntityManagerFactoryBean().apply {
-            this.jpaVendorAdapter = HibernateJpaVendorAdapter()
-            this.setJpaProperties(mergedJpaProperties)
-            this.dataSource = applicationDataSource
-            this.persistenceUnitName = "pointApp"
-            this.setPackagesToScan("dev.teamuts.point.persistence.*.entity")
-        }
+    return LocalContainerEntityManagerFactoryBean().apply {
+      this.jpaVendorAdapter = HibernateJpaVendorAdapter()
+      this.setJpaProperties(mergedJpaProperties)
+      this.dataSource = applicationDataSource
+      this.persistenceUnitName = "pointApp"
+      this.setPackagesToScan("dev.teamuts.point.persistence.*.entity")
     }
+  }
 
-    @Bean(APP_JPA_QUERY_FACTORY)
-    fun jpaQueryFactory(
-        @Qualifier(APP_ENTITY_MANAGER) appEntityManager: EntityManager
-    ): JPAQueryFactory {
-        return JPAQueryFactory(appEntityManager)
-    }
+  @Bean(APP_JPA_QUERY_FACTORY)
+  fun jpaQueryFactory(
+    @Qualifier(APP_ENTITY_MANAGER) appEntityManager: EntityManager
+  ): JPAQueryFactory {
+    return JPAQueryFactory(appEntityManager)
+  }
 
-    @Bean
-    fun auditorProvider(): AuditorAware<String> {
-        return AuditorAware {
-            Optional.of(SYSTEM)
-        }
+  @Bean
+  fun auditorProvider(): AuditorAware<String> {
+    return AuditorAware {
+      Optional.of(SYSTEM)
     }
+  }
 }

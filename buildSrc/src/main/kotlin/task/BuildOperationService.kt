@@ -8,19 +8,20 @@ import org.gradle.tooling.events.task.TaskFinishEvent
 import task.test.TestContainer
 import task.test.TestLoggingUtils
 
-abstract class BuildOperationService : BuildService<BuildOperationService.Params>, OperationCompletionListener {
-    interface Params : BuildServiceParameters {
-        var targetTaskPaths: List<String>
+abstract class BuildOperationService :
+  BuildService<BuildOperationService.Params>, OperationCompletionListener {
+  interface Params : BuildServiceParameters {
+    var targetTaskPaths: List<String>
+  }
+
+  override fun onFinish(event: FinishEvent?) {
+    if (event == null || event !is TaskFinishEvent) {
+      return
     }
 
-    override fun onFinish(event: FinishEvent?) {
-        if (event == null || event !is TaskFinishEvent) {
-            return
-        }
-
-        if (parameters.targetTaskPaths.contains(event.descriptor.taskPath)) {
-            TestLoggingUtils.printTotalResult(TestContainer.testResults)
-            TestContainer.testResults = null
-        }
+    if (parameters.targetTaskPaths.contains(event.descriptor.taskPath)) {
+      TestLoggingUtils.printTotalResult(TestContainer.testResults)
+      TestContainer.testResults = null
     }
+  }
 }

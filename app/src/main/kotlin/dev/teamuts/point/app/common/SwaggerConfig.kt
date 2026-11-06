@@ -9,23 +9,19 @@ import org.springframework.context.annotation.Primary
 
 @Configuration(proxyBeanMethods = false)
 class SwaggerConfig {
-    @Bean
-    fun openApi(): OpenAPI {
-        return OpenAPI()
-            .info(
-                Info().title("Point API")
-                    .description("Point API documentation")
-                    .version("v1")
-            )
-    }
+  @Bean
+  fun openApi(): OpenAPI {
+    return OpenAPI()
+      .info(Info().title("Point API").description("Point API documentation").version("v1"))
+  }
 
-    @Primary
-    @Bean
-    fun swaggerUiConfig(): SwaggerUiConfigProperties {
-        return SwaggerUiConfigProperties().apply {
-            this.setDefaultModelsExpandDepth(-1) // Disable model expansion by default
-            this.setTagsSorter("alpha") // Sort tags alphabetically
-            this.setOperationsSorter("alpha") // Sort operations alphabetically
-        }
+  @Primary
+  @Bean
+  fun swaggerUiConfig(): SwaggerUiConfigProperties {
+    return SwaggerUiConfigProperties().apply {
+      this.setDefaultModelsExpandDepth(-1) // Disable model expansion by default
+      this.setTagsSorter("alpha") // Sort tags alphabetically
+      this.setOperationsSorter("alpha") // Sort operations alphabetically
     }
+  }
 }

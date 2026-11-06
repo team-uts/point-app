@@ -9,60 +9,60 @@ import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import java.io.IOException
 import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import org.springframework.web.util.ContentCachingRequestWrapper
 import org.springframework.web.util.ContentCachingResponseWrapper
-import java.io.IOException
 
 private val log = KotlinLogging.logger {}
 
 @Component
 @Order(org.springframework.core.Ordered.HIGHEST_PRECEDENCE)
 class ReqResLoggingFilter(
-    private val appRequestMatcherHolder: AppRequestMatcherHolder,
-    private val appProfile: AppProfile
+  private val appRequestMatcherHolder: AppRequestMatcherHolder,
+  private val appProfile: AppProfile,
 ) : OncePerRequestFilter() {
-    override fun shouldNotFilter(request: HttpServletRequest): Boolean {
-        return appRequestMatcherHolder
-            .getShouldNotLoggingFilterMatchers()
-            .toOrRequestMatcher()
-            .matches(request)
+  override fun shouldNotFilter(request: HttpServletRequest): Boolean {
+    return appRequestMatcherHolder
+      .getShouldNotLoggingFilterMatchers()
+      .toOrRequestMatcher()
+      .matches(request)
+  }
+
+  @Throws(IOException::class, ServletException::class)
+  override fun doFilterInternal(
+    request: HttpServletRequest,
+    response: HttpServletResponse,
+    filterChain: FilterChain,
+  ) {
+    val requestWrapper = ContentCachingRequestWrapper(request, -1)
+    val responseWrapper = ContentCachingResponseWrapper(response)
+
+    RequestLogType.putAllLogsToMdc(requestWrapper)
+
+    val startTime: Long = System.currentTimeMillis()
+    filterChain.doFilter(requestWrapper, responseWrapper)
+    val endTime: Long = System.currentTimeMillis()
+
+    val elapsedTime: Double = TimeUtils.convertMillisToSecWithPrecision(endTime - startTime)
+
+    try {
+      log.info {
+        HttpLogMessage.newInstance(
+            requestWrapper = requestWrapper,
+            responseWrapper = responseWrapper,
+            elapsedTime = elapsedTime,
+          )
+          .getLogMsg(appProfile)
+      }
+
+      responseWrapper.copyBodyToResponse()
+    } catch (e: Exception) {
+      log.error(e) { "[${this.javaClass.getSimpleName()}] Logging failed" }
     }
 
-    @Throws(IOException::class, ServletException::class)
-    override fun doFilterInternal(
-        request: HttpServletRequest,
-        response: HttpServletResponse,
-        filterChain: FilterChain
-    ) {
-        val requestWrapper = ContentCachingRequestWrapper(request, -1)
-        val responseWrapper = ContentCachingResponseWrapper(response)
-
-        RequestLogType.putAllLogsToMdc(requestWrapper)
-
-        val startTime: Long = System.currentTimeMillis()
-        filterChain.doFilter(requestWrapper, responseWrapper)
-        val endTime: Long = System.currentTimeMillis()
-
-        val elapsedTime: Double =
-            TimeUtils.convertMillisToSecWithPrecision(endTime - startTime)
-
-        try {
-            log.info {
-                HttpLogMessage.newInstance(
-                    requestWrapper = requestWrapper,
-                    responseWrapper = responseWrapper,
-                    elapsedTime = elapsedTime
-                ).getLogMsg(appProfile)
-            }
-
-            responseWrapper.copyBodyToResponse()
-        } catch (e: Exception) {
-            log.error(e) { "[${this.javaClass.getSimpleName()}] Logging failed" }
-        }
-
-        RequestLogType.removeAllMdcLogs()
-    }
+    RequestLogType.removeAllMdcLogs()
+  }
 }

@@ -11,18 +11,18 @@ import org.springframework.security.web.SecurityFilterChain
 @Configuration(proxyBeanMethods = false)
 @EnableWebSecurity
 class SecurityConfig {
-    @Bean
-    fun filterChain(http: HttpSecurity): SecurityFilterChain {
-        return http
-            .csrf { it.disable() }
-            .formLogin { it.disable() }
-            .cors(withDefaults())
-            .authorizeHttpRequests {
-                it.anyRequest().permitAll()
-            }
-            .sessionManagement {
-                it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            }
-            .build()
-    }
+  @Bean
+  fun filterChain(http: HttpSecurity): SecurityFilterChain {
+    return http
+      .csrf { it.disable() }
+      .formLogin { it.disable() }
+      .cors(withDefaults())
+      .authorizeHttpRequests {
+        it.anyRequest().permitAll()
+      }
+      .sessionManagement {
+        it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+      }
+      .build()
+  }
 }

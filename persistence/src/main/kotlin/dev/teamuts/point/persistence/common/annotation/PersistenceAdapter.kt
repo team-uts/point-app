@@ -7,6 +7,5 @@ import org.springframework.stereotype.Component
 @Retention(AnnotationRetention.RUNTIME)
 @Component
 annotation class PersistenceAdapter(
-    @get:AliasFor(annotation = Component::class)
-    val value: String = ""
+  @get:AliasFor(annotation = Component::class) val value: String = ""
 )

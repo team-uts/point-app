@@ -10,7 +10,6 @@ mapstruct = "1.6.3"
 flywaydb = "13.2.0"
 
 spotless = "8.10.3"
-ktlint = "1.8.0"
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }

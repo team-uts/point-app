@@ -7,10 +7,9 @@ import org.gradle.api.tasks.PathSensitivity
 import org.gradle.process.CommandLineArgumentProvider
 
 abstract class MockitoAgentProvider : CommandLineArgumentProvider {
-    @get:InputFiles
-    @get:PathSensitive(PathSensitivity.RELATIVE)
-    abstract val agentJar: ConfigurableFileCollection
+  @get:InputFiles
+  @get:PathSensitive(PathSensitivity.RELATIVE)
+  abstract val agentJar: ConfigurableFileCollection
 
-    override fun asArguments(): Iterable<String> =
-        listOf("-javaagent:${agentJar.asPath}")
+  override fun asArguments(): Iterable<String> = listOf("-javaagent:${agentJar.asPath}")
 }

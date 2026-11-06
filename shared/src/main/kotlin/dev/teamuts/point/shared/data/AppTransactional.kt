@@ -8,15 +8,11 @@ import org.springframework.transaction.annotation.Transactional
 @Retention(AnnotationRetention.RUNTIME)
 @Transactional(transactionManager = TransactionConstants.APP_TRANSACTION_MANAGER)
 annotation class AppTransactional(
-    /**
-     * @see [Transactional.readOnly]
-     */
-    @get:AliasFor(attribute = "readOnly", annotation = Transactional::class)
-    val readOnly: Boolean = false,
+  /** @see [Transactional.readOnly] */
+  @get:AliasFor(attribute = "readOnly", annotation = Transactional::class)
+  val readOnly: Boolean = false,
 
-    /**
-     * @see [Transactional.propagation]
-     */
-    @get:AliasFor(attribute = "propagation", annotation = Transactional::class)
-    val propagation: Propagation = Propagation.REQUIRED
+  /** @see [Transactional.propagation] */
+  @get:AliasFor(attribute = "propagation", annotation = Transactional::class)
+  val propagation: Propagation = Propagation.REQUIRED,
 )

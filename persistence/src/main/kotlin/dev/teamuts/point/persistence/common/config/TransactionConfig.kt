@@ -14,14 +14,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
 @Configuration(proxyBeanMethods = false)
 @EnableTransactionManagement
 class TransactionConfig {
-    @Primary
-    @Bean(APP_TRANSACTION_MANAGER)
-    fun appTransactionManager(
-        @Qualifier(APP_ENTITY_MANAGER)
-        appEntityManager: LocalContainerEntityManagerFactoryBean
-    ): PlatformTransactionManager {
-        return JpaTransactionManager().apply {
-            this.entityManagerFactory = appEntityManager.`object`
-        }
+  @Primary
+  @Bean(APP_TRANSACTION_MANAGER)
+  fun appTransactionManager(
+    @Qualifier(APP_ENTITY_MANAGER) appEntityManager: LocalContainerEntityManagerFactoryBean
+  ): PlatformTransactionManager {
+    return JpaTransactionManager().apply {
+      this.entityManagerFactory = appEntityManager.`object`
     }
+  }
 }
