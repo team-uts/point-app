@@ -27,11 +27,11 @@ class PointBalanceTransaction(
 
   val operationType: BalanceOperationType = operationType
 
-  val cashAmount: Money = Money.of(cashAmount, currency)
+  private val cashAmount: Money = Money.of(cashAmount, currency)
 
-  val expAmount: Money = Money.of(expAmount, currency)
+  private val expAmount: Money = Money.of(expAmount, currency)
 
-  val afterBalanceAmount: Money = Money.of(afterBalanceAmount, currency)
+  private val afterBalanceAmount: Money = Money.of(afterBalanceAmount, currency)
 
   val paymentType: String? = paymentType
 
@@ -60,8 +60,32 @@ class PointBalanceTransaction(
         afterBalanceAmount = afterBalanceAmount,
         currency = currency,
         paymentType = paymentType,
-        payTransactionId = payTransactionId
+        payTransactionId = payTransactionId,
       )
     }
+  }
+
+  fun getCashAmount(): BigDecimal {
+    return cashAmount.amount
+  }
+
+  fun getExpAmount(): BigDecimal {
+    return expAmount.amount
+  }
+
+  fun getAfterBalanceAmount(): BigDecimal {
+    return afterBalanceAmount.amount
+  }
+
+  fun getCurrency(): Currency {
+    check(
+      cashAmount.currency == expAmount.currency &&
+        cashAmount.currency == afterBalanceAmount.currency
+    ) {
+      throw IllegalStateException(
+        "Currency mismatch among cashAmount, expAmount, and afterBalanceAmount"
+      )
+    }
+    return cashAmount.currency
   }
 }

@@ -44,11 +44,11 @@ class PointTemplate(
 
   val issuanceAmountType: PointIssuanceAmountType = issuanceAmountType
 
-  val issuanceAmount: Money = Money.of(issuanceAmount, issuanceCurrency)
+  private val issuanceAmount: Money = Money.of(issuanceAmount, issuanceCurrency)
 
   val issuancePercentage: BigDecimal? = issuancePercentage
 
-  val maxIssuanceAmount: Money = Money.of(maxIssuanceAmount, issuanceCurrency)
+  private val maxIssuanceAmount: Money = Money.of(maxIssuanceAmount, issuanceCurrency)
 
   val expirationType: PointExpirationType = expirationType
 
@@ -92,5 +92,23 @@ class PointTemplate(
         expiresAt = expiresAt,
       )
     }
+  }
+
+  fun getIssuanceAmount(): BigDecimal {
+    return issuanceAmount.amount
+  }
+
+  fun getMaxIssuanceAmount(): BigDecimal {
+    return maxIssuanceAmount.amount
+  }
+
+  fun getIssuanceCurrency(): Currency {
+    check(issuanceAmount.currency == maxIssuanceAmount.currency) {
+      throw IllegalStateException(
+        "issuanceAmount.currency and maxIssuanceAmount.currency must be same."
+      )
+    }
+
+    return issuanceAmount.currency
   }
 }

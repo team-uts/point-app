@@ -2,6 +2,7 @@ package dev.teamuts.point.persistence.balance.entity
 
 import dev.teamuts.point.domain.balance.constant.BalanceOperationType
 import dev.teamuts.point.domain.balance.constant.BalanceTransactionType
+import dev.teamuts.point.domain.balance.model.PointBalanceTransaction
 import dev.teamuts.point.domain.common.constant.Currency
 import dev.teamuts.point.persistence.common.entity.BaseAuditableEntity
 import dev.teamuts.point.persistence.common.entity.EntityMetadata.Companion.PREFIX_INDEX
@@ -101,4 +102,23 @@ class PointBalanceTransactionJpaEntity(
   )
   var paymentType: String? = paymentType
     protected set
+
+  companion object {
+    fun of(
+      model: PointBalanceTransaction,
+      balance: PointBalanceJpaEntity,
+    ): PointBalanceTransactionJpaEntity {
+      return PointBalanceTransactionJpaEntity(
+        balance = balance,
+        transactionType = model.transactionType,
+        operationType = model.operationType,
+        cashAmount = model.getCashAmount(),
+        expAmount = model.getExpAmount(),
+        afterBalanceAmount = model.getAfterBalanceAmount(),
+        currency = model.getCurrency(),
+        paymentType = model.paymentType,
+        payTransactionId = model.payTransactionId,
+      )
+    }
+  }
 }

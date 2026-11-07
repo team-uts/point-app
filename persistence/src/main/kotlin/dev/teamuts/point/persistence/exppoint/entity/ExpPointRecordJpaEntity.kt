@@ -3,6 +3,7 @@ package dev.teamuts.point.persistence.exppoint.entity
 import dev.teamuts.point.domain.balance.constant.OwnerType
 import dev.teamuts.point.domain.common.constant.Currency
 import dev.teamuts.point.domain.exppoint.constant.ExpPointRecordStatus
+import dev.teamuts.point.domain.exppoint.model.ExpPointRecord
 import dev.teamuts.point.persistence.balance.entity.PointBalanceJpaEntity
 import dev.teamuts.point.persistence.balance.entity.PointBalanceTransactionJpaEntity
 import dev.teamuts.point.persistence.common.entity.BaseAuditableEntity
@@ -103,4 +104,24 @@ class ExpPointRecordJpaEntity(
   @Column(name = "status", nullable = false, comment = "point record status")
   var status: ExpPointRecordStatus = status
     protected set
+
+  companion object {
+    fun of(
+      model: ExpPointRecord,
+      balance: PointBalanceJpaEntity,
+      pointTransaction: PointBalanceTransactionJpaEntity,
+    ): ExpPointRecordJpaEntity {
+      return ExpPointRecordJpaEntity(
+        balance = balance,
+        ownerType = model.ownerType,
+        pointTransaction = pointTransaction,
+        totalAmount = model.totalAmount.amount,
+        remainingAmount = model.remainingAmount.amount,
+        currency = model.totalAmount.currency,
+        expiresAt = model.expiresAt,
+        expiredAt = model.expiredAt,
+        status = model.status,
+      )
+    }
+  }
 }

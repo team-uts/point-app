@@ -1,6 +1,7 @@
 package dev.teamuts.point.persistence.exppoint.entity
 
 import dev.teamuts.point.domain.common.constant.Currency
+import dev.teamuts.point.domain.exppoint.model.ExpPointRecordMapping
 import dev.teamuts.point.persistence.balance.entity.PointBalanceTransactionJpaEntity
 import dev.teamuts.point.persistence.common.entity.BaseCreationEntity
 import dev.teamuts.point.persistence.common.entity.EntityMetadata.Companion.PREFIX_INDEX
@@ -74,4 +75,19 @@ class ExpPointRecordMappingJpaEntity(
   )
   var currency: Currency = currency
     protected set
+
+  companion object {
+    fun of(
+      model: ExpPointRecordMapping,
+      pointTransaction: PointBalanceTransactionJpaEntity,
+      expPointRecord: ExpPointRecordJpaEntity,
+    ): ExpPointRecordMappingJpaEntity {
+      return ExpPointRecordMappingJpaEntity(
+        pointTransaction = pointTransaction,
+        expPointRecord = expPointRecord,
+        amount = model.getAmount(),
+        currency = model.getCurrency(),
+      )
+    }
+  }
 }

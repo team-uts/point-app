@@ -18,7 +18,7 @@ class ExpPointRecordMapping(
 
   val expPointRecordId: Long = expPointRecordId
 
-  val amount: Money = Money.of(amount, currency)
+  private val amount: Money = Money.of(amount, currency)
 
   companion object {
     fun fromDatabase(
@@ -36,5 +36,13 @@ class ExpPointRecordMapping(
         currency = currency,
       )
     }
+  }
+
+  fun getAmount(): BigDecimal {
+    return amount.amount
+  }
+
+  fun getCurrency(): Currency {
+    return amount.currency
   }
 }

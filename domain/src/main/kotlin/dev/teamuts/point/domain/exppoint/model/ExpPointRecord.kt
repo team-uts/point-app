@@ -64,7 +64,7 @@ class ExpPointRecord(
         currency = currency,
         expiresAt = expiresAt,
         expiredAt = expiredAt,
-        status = status
+        status = status,
       )
     }
   }

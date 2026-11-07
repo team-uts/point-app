@@ -2,6 +2,7 @@ package dev.teamuts.point.persistence.balance.entity
 
 import dev.teamuts.point.domain.balance.constant.OwnerType
 import dev.teamuts.point.domain.balance.constant.PointBalanceStatus
+import dev.teamuts.point.domain.balance.model.PointBalance
 import dev.teamuts.point.domain.common.constant.Currency
 import dev.teamuts.point.persistence.common.entity.BaseAuditableEntity
 import dev.teamuts.point.persistence.common.entity.EntityMetadata.Companion.PREFIX_UNIQUE
@@ -68,4 +69,16 @@ class PointBalanceJpaEntity(
   @Column(name = "status", nullable = false, comment = "point balance status")
   var status: PointBalanceStatus = status
     protected set
+
+  companion object {
+    fun of(model: PointBalance): PointBalanceJpaEntity {
+      return PointBalanceJpaEntity(
+        memberId = model.memberId,
+        ownerType = model.ownerType,
+        amount = model.getAmount(),
+        currency = model.getCurrency(),
+        status = model.status,
+      )
+    }
+  }
 }

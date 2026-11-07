@@ -4,6 +4,7 @@ import dev.teamuts.point.domain.balance.constant.OwnerType
 import dev.teamuts.point.domain.common.constant.Currency
 import dev.teamuts.point.domain.exppoint.constant.PointExpirationType
 import dev.teamuts.point.domain.exppoint.constant.PointIssuanceAmountType
+import dev.teamuts.point.domain.exppoint.model.PointTemplate
 import dev.teamuts.point.persistence.common.entity.BaseAuditableEntity
 import dev.teamuts.point.persistence.common.entity.EntityMetadata.Companion.PREFIX_UNIQUE
 import jakarta.persistence.*
@@ -142,4 +143,25 @@ class PointTemplateJpaEntity(
   @Column(name = "expires_at", nullable = true, comment = "expiration date (when FIXED)")
   var expiresAt: ZonedDateTime? = expiresAt
     protected set
+
+  companion object {
+    fun of(model: PointTemplate): PointTemplateJpaEntity {
+      return PointTemplateJpaEntity(
+        templateName = model.templateName,
+        extTemplateId = model.extTemplateId,
+        ownerType = model.ownerType,
+        active = model.active,
+        issuanceStartsAt = model.issuanceStartsAt,
+        issuanceEndsAt = model.issuanceEndsAt,
+        issuanceAmountType = model.issuanceAmountType,
+        issuanceAmount = model.getIssuanceAmount(),
+        issuancePercentage = model.issuancePercentage,
+        maxIssuanceAmount = model.getMaxIssuanceAmount(),
+        issuanceCurrency = model.getIssuanceCurrency(),
+        expirationType = model.expirationType,
+        expirationPeriod = model.expirationPeriod,
+        expiresAt = model.expiresAt,
+      )
+    }
+  }
 }

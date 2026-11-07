@@ -21,8 +21,7 @@ class PointBalance(
 
   val ownerType: OwnerType = ownerType
 
-  var amount: Money = Money.of(amount, currency)
-    private set
+  private var amount: Money = Money.of(amount, currency)
 
   var status: PointBalanceStatus = status
     private set
@@ -59,5 +58,13 @@ class PointBalance(
         status = status,
       )
     }
+  }
+
+  fun getAmount(): BigDecimal {
+    return amount.amount
+  }
+
+  fun getCurrency(): Currency {
+    return amount.currency
   }
 }
