@@ -1,7 +1,7 @@
 package dev.teamuts.point.persistence.common.config.properties
 
 import dev.teamuts.point.persistence.common.constant.DataSourceConstants.SPRING_DATA_SOURCE_PREFIX
-import dev.teamuts.point.shared.utils.ConfigUtils
+import dev.teamuts.shared.utils.ConfigUtils
 import java.util.*
 import org.springframework.boot.context.properties.ConfigurationProperties
 

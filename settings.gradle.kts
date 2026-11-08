@@ -5,9 +5,6 @@ pluginManagement {
     gradlePluginPortal()
     mavenCentral()
   }
-  plugins {
-    kotlin("kapt") version "2.3.21"
-  }
 }
 
 dependencyResolutionManagement {
@@ -15,6 +12,8 @@ dependencyResolutionManagement {
   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
   repositories {
     mavenCentral()
+    // jitpack.io is used to fetch the payment-shared library
+    maven { url = uri("https://jitpack.io") }
   }
 }
 
@@ -25,5 +24,4 @@ include(
   "domain",
   "persistence",
   "infra",
-  "shared",
 )

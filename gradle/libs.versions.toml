@@ -2,14 +2,23 @@
 java = "21"
 kotlin = "2.3.21"
 
+kotlin-logging = "8.0.4"
+
 spring-boot = "4.1.0"
 spring-dependency-management = "1.1.7"
+
+springdoc-openapi = "3.2.0"
 
 querydsl = "5.1.0"
 mapstruct = "1.6.3"
 flywaydb = "13.2.0"
 
 spotless = "8.10.3"
+
+payment-shared = "0.3.0"
+
+easyRandom = "6.0.1"
+mockito = "5.23.0"
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
@@ -24,8 +33,10 @@ flyway = { id = "org.flywaydb.flyway", version.ref = "flywaydb" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 
 [libraries]
+teamuts-payment-shared = { module = "com.github.team-uts:payment-shared", version.ref = "payment-shared" }
+
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
-kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version = "8.0.4" }
+kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "kotlin-logging" }
 
 spring-tx = { module = "org.springframework:spring-tx" }
 
@@ -50,10 +61,9 @@ mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.re
 querydsl-jpa = { module = "com.querydsl:querydsl-jpa", version.ref = "querydsl" }
 querydsl-apt = { module = "com.querydsl:querydsl-apt", version.ref = "querydsl" }
 
-springdoc-openapi-webmvc = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version = "3.2.0" }
+springdoc-openapi-webmvc = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc-openapi" }
 
-easyRandom = { module = "org.jeasy:easy-random", version = "6.0.1" }
+easyRandom = { module = "org.jeasy:easy-random", version.ref = "easyRandom" }
+mockito = { module = "org.mockito:mockito-core", version.ref = "mockito" }
 
 google-gson = { module = "com.google.code.gson:gson" }
-
-mockito = { module = "org.mockito:mockito-core", version = "5.23.0" }

@@ -81,6 +81,8 @@ subprojects {
     implementation("tools.jackson.module:jackson-module-kotlin")
     implementation(projectLibs.kotlin.logging)
 
+    implementation(projectLibs.teamuts.payment.shared)
+
     testImplementation(projectLibs.spring.boot.starter.webmvc.test)
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")

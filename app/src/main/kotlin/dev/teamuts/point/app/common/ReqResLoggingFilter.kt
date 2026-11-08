@@ -1,15 +1,16 @@
-package dev.teamuts.point.app.logging
+package dev.teamuts.point.app.common
 
-import dev.teamuts.point.app.logging.constant.RequestLogType
-import dev.teamuts.point.app.security.AppRequestMatcherHolder
-import dev.teamuts.point.shared.config.AppProfile
-import dev.teamuts.point.shared.utils.TimeUtils
+import dev.teamuts.shared.config.AppProfile
+import dev.teamuts.shared.http.logging.HttpLogMessage
+import dev.teamuts.shared.http.logging.RequestLogType
+import dev.teamuts.shared.utils.TimeUtils
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import java.io.IOException
+import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
@@ -19,7 +20,7 @@ import org.springframework.web.util.ContentCachingResponseWrapper
 private val log = KotlinLogging.logger {}
 
 @Component
-@Order(org.springframework.core.Ordered.HIGHEST_PRECEDENCE)
+@Order(Ordered.HIGHEST_PRECEDENCE)
 class ReqResLoggingFilter(
   private val appRequestMatcherHolder: AppRequestMatcherHolder,
   private val appProfile: AppProfile,
@@ -51,9 +52,9 @@ class ReqResLoggingFilter(
     try {
       log.info {
         HttpLogMessage.newInstance(
-            requestWrapper = requestWrapper,
-            responseWrapper = responseWrapper,
-            elapsedTime = elapsedTime,
+            requestWrapper,
+            responseWrapper,
+            elapsedTime,
           )
           .getLogMsg(appProfile)
       }

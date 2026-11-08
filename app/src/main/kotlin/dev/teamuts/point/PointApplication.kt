@@ -1,6 +1,6 @@
 package dev.teamuts.point
 
-import dev.teamuts.point.shared.config.AppModule.APPLICATION_MODULES
+import dev.teamuts.shared.config.AppModule
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.builder.SpringApplicationBuilder
 
@@ -8,6 +8,6 @@ import org.springframework.boot.builder.SpringApplicationBuilder
 
 fun main(args: Array<String>) {
   SpringApplicationBuilder(PointApplication::class.java)
-    .properties("spring.config.name=${APPLICATION_MODULES}")
+    .properties("spring.config.name=${AppModule.getApplicationModuleNames()}")
     .run(*args)
 }

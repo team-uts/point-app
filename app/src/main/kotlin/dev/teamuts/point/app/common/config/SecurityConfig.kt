@@ -1,4 +1,4 @@
-package dev.teamuts.point.app.common
+package dev.teamuts.point.app.common.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

@@ -1,7 +1,7 @@
 package dev.teamuts.point.persistence.common.config
 
 import dev.teamuts.point.persistence.common.constant.JpaConstants.APP_ENTITY_MANAGER
-import dev.teamuts.point.shared.data.TransactionConstants.APP_TRANSACTION_MANAGER
+import dev.teamuts.shared.data.TransactionConstants.APP_TRANSACTION_MANAGER
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

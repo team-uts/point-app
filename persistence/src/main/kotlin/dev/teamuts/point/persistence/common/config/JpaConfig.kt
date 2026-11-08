@@ -4,7 +4,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory
 import dev.teamuts.point.persistence.common.constant.DataSourceConstants.APPLICATION_DATA_SOURCE
 import dev.teamuts.point.persistence.common.constant.JpaConstants.APP_ENTITY_MANAGER
 import dev.teamuts.point.persistence.common.constant.JpaConstants.APP_JPA_QUERY_FACTORY
-import dev.teamuts.point.shared.data.TransactionConstants.APP_TRANSACTION_MANAGER
+import dev.teamuts.shared.data.TransactionConstants.APP_TRANSACTION_MANAGER
 import jakarta.persistence.EntityManager
 import java.util.*
 import javax.sql.DataSource

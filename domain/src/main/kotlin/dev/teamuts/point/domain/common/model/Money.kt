@@ -1,7 +1,7 @@
 package dev.teamuts.point.domain.common.model
 
 import dev.teamuts.point.domain.common.constant.Currency
-import dev.teamuts.point.shared.utils.MoneyCalculator
+import dev.teamuts.shared.utils.MoneyCalculator
 import java.math.BigDecimal
 import java.math.RoundingMode
 

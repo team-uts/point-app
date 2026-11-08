@@ -9,7 +9,6 @@ afterEvaluate {
   val multiModules =
     listOf(
       ":domain",
-      ":shared",
       ":persistence",
       ":infra",
     )
@@ -29,7 +28,6 @@ afterEvaluate {
 
 dependencies {
   implementation(project(":domain"))
-  implementation(project(":shared"))
   implementation(project(":infra"))
   implementation(project(":persistence"))
 

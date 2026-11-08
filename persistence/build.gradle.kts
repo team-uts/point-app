@@ -35,7 +35,6 @@ allOpen {
 
 dependencies {
   implementation(project(":domain"))
-  implementation(project(":shared"))
 
   implementation(libs.flyway.core)
   implementation(libs.flyway.mysql)

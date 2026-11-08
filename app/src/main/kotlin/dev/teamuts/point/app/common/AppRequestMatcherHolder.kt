@@ -1,5 +1,7 @@
-package dev.teamuts.point.app.security
+package dev.teamuts.point.app.common
 
+import dev.teamuts.shared.auth.AppRequestMatcher
+import dev.teamuts.shared.auth.AppRequestMatchers
 import org.springdoc.core.properties.SpringDocConfigProperties
 import org.springdoc.core.properties.SwaggerUiConfigProperties
 import org.springframework.boot.actuate.autoconfigure.endpoint.web.WebEndpointProperties
@@ -16,21 +18,24 @@ class AppRequestMatcherHolder(
   private val actuatorEndpoints: AppRequestMatchers =
     AppRequestMatchers.of(
       AppRequestMatcher.noneRoleOf(
-        urlPattern = "${actuatorProperties.basePath}/**",
-        httpMethod = HttpMethod.GET,
+        /* urlPattern = */ "${actuatorProperties.basePath}/**",
+        /* httpMethod = */ HttpMethod.GET,
       )
     )
 
   private val swaggerUrls: AppRequestMatchers =
     AppRequestMatchers.of(
       AppRequestMatcher.noneRoleOf(
-        urlPattern = swaggerUiProperties.getPath(),
-        httpMethod = HttpMethod.GET,
+        /* urlPattern = */ swaggerUiProperties.getPath(),
+        /* httpMethod = */ HttpMethod.GET,
       ),
-      AppRequestMatcher.noneRoleOf(urlPattern = "/swagger-ui/**", httpMethod = HttpMethod.GET),
       AppRequestMatcher.noneRoleOf(
-        urlPattern = "${springDocProperties.apiDocs.path}/**",
-        httpMethod = HttpMethod.GET,
+        /* urlPattern = */ "/swagger-ui/**",
+        /* httpMethod = */ HttpMethod.GET,
+      ),
+      AppRequestMatcher.noneRoleOf(
+        /* urlPattern = */ "${springDocProperties.apiDocs.path}/**",
+        /* httpMethod = */ HttpMethod.GET,
       ),
     )
 
@@ -40,8 +45,8 @@ class AppRequestMatcherHolder(
         .flatMap { it.patterns.toList() }
         .map {
           AppRequestMatcher.noneRoleOf(
-            urlPattern = it,
-            httpMethod = HttpMethod.GET,
+            /* urlPattern = */ it,
+            /* httpMethod = */ HttpMethod.GET,
           )
         }
   }
