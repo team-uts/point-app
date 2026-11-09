@@ -1,11 +1,4 @@
-import extensions.pluginId
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.gradle.api.tasks.testing.logging.TestLogEvent
-import task.BuildLifecyclePlugin
-import task.test.MockitoAgentProvider
-import task.test.TestContainer
-import task.test.TestLoggingUtils
-import task.test.TestSummary
+import dev.teamuts.gradle.utils.pluginId
 
 plugins {
   java
@@ -18,6 +11,7 @@ plugins {
   alias(libs.plugins.kotlin.kapt).apply(false)
 
   alias(libs.plugins.spotless)
+  alias(libs.plugins.teamuts.paymentConvention).apply(false)
 }
 
 val projectLibs = libs
@@ -58,6 +52,7 @@ subprojects {
     plugin(projectLibs.plugins.kotlin.jvm.pluginId())
     plugin(projectLibs.plugins.kotlin.spring.pluginId())
     plugin(projectLibs.plugins.kotlin.jpa.pluginId())
+    plugin(projectLibs.plugins.teamuts.paymentConvention.pluginId())
   }
 
   java {
@@ -72,8 +67,7 @@ subprojects {
     }
   }
 
-  val mockitoAgent = configurations.create("mockitoAgent")
-
+  val mockitoAgent = configurations.maybeCreate("mockitoAgent")
   dependencies {
     implementation(projectLibs.spring.boot.starter.webmvc)
     implementation(projectLibs.spring.tx)
@@ -92,59 +86,5 @@ subprojects {
 
   tasks.withType<Test> {
     useJUnitPlatform()
-
-    // https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
-    jvmArgumentProviders.add(
-      objects.newInstance<MockitoAgentProvider>().apply {
-        agentJar.from(mockitoAgent)
-      }
-    )
-
-    jvmArgs("-Xshare:off") // deactivate Class Data Sharing(CDS)
-
-    testLogging {
-      events =
-        setOf(
-          TestLogEvent.FAILED,
-          TestLogEvent.SKIPPED,
-          TestLogEvent.STANDARD_ERROR,
-        )
-
-      exceptionFormat = TestExceptionFormat.FULL
-      showExceptions = true
-      showCauses = true
-      showStackTraces = true
-    }
-
-    //        ignoreFailures = true
-
-    addTestListener(
-      object : TestListener {
-        override fun beforeSuite(desc: TestDescriptor) {}
-
-        // handling after all test finished
-        override fun afterSuite(desc: TestDescriptor, result: TestResult) {
-          if (desc.parent != null) return
-
-          val summary =
-            TestSummary(
-              projectName = project.name,
-              taskName = name,
-              result = result,
-            )
-
-          TestContainer.testResults = summary
-        }
-
-        override fun beforeTest(desc: TestDescriptor) {}
-
-        // handling after each test finished
-        override fun afterTest(desc: TestDescriptor, result: TestResult) {
-          TestLoggingUtils.printEachResult(desc, result)
-        }
-      }
-    )
   }
-
-  pluginManager.apply(BuildLifecyclePlugin::class.java)
 }
