@@ -3,7 +3,7 @@
 pluginManagement {
   repositories {
     // to use the payment-convention plugin
-    maven { url = uri("https://team-uts.github.io/payment-gradle-plugins") }
+    maven { url = uri("https://team-uts.github.io/payment-gradle-plugins/maven-repo") }
     gradlePluginPortal()
     mavenCentral()
   }
@@ -13,9 +13,11 @@ dependencyResolutionManagement {
   // UnstableApiUsage
   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
   repositories {
+    maven {
+      url = uri("https://team-uts.github.io/payment-shared/maven-repo")
+      content { includeGroup("dev.teamuts.shared") }
+    }
     mavenCentral()
-    // jitpack.io is used to fetch the payment-shared library
-    maven { url = uri("https://jitpack.io") }
   }
 }
 

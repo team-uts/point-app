@@ -11,7 +11,7 @@ plugins {
   alias(libs.plugins.kotlin.kapt).apply(false)
 
   alias(libs.plugins.spotless)
-  alias(libs.plugins.teamuts.paymentConvention).apply(false)
+  alias(libs.plugins.teamuts.paymentConvention)
 }
 
 val projectLibs = libs
@@ -86,5 +86,12 @@ subprojects {
 
   tasks.withType<Test> {
     useJUnitPlatform()
+  }
+
+  // https://github.com/team-uts/payment-gradle-plugins
+  paymentConvention {
+    testLogging {
+      enabled = true
+    }
   }
 }
