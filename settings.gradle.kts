@@ -13,6 +13,7 @@ dependencyResolutionManagement {
   // UnstableApiUsage
   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
   repositories {
+    // payment shared modules.
     maven {
       url = uri("https://team-uts.github.io/payment-shared/maven-repo")
       content { includeGroup("dev.teamuts.shared") }
