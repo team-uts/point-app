@@ -6,6 +6,7 @@ import dev.teamuts.point.domain.exppoint.error.ExpPointException
 import dev.teamuts.shared.domain.constant.Currency
 import dev.teamuts.shared.domain.model.Money
 import dev.teamuts.shared.domain.model.Percentage
+import dev.teamuts.shared.utils.AppTimeUtils
 import java.math.BigDecimal
 import java.time.ZonedDateTime
 
@@ -14,10 +15,38 @@ private constructor(
   override val issuanceStartsAt: ZonedDateTime,
   override val issuanceEndsAt: ZonedDateTime,
   override val issuanceAmountType: PointIssuanceAmountType,
-  private val issuanceAmount: Money,
-  private val issuancePercentage: Percentage?,
-  private val maxIssuanceAmount: Money,
+  issuanceAmount: BigDecimal,
+  issuancePercentage: BigDecimal?,
+  maxIssuanceAmount: BigDecimal,
+  issuanceCurrency: Currency,
 ) : IssuanceDetails {
+  private val issuanceAmount: Money =
+    issuanceAmountType.getAmountOrZero(issuanceAmount, issuanceCurrency)
+
+  private val issuancePercentage: Percentage? =
+    issuanceAmountType.getPercentageOrNull(issuancePercentage)
+
+  private val maxIssuanceAmount: Money = Money.of(maxIssuanceAmount, issuanceCurrency)
+
+  init {
+    check(
+      issuanceEndsAt.isAfter(AppTimeUtils.getNowTime()) &&
+        issuanceStartsAt.isBefore(issuanceEndsAt) &&
+        issuanceAmountType.validate(this) &&
+        this.maxIssuanceAmount.isGreaterThanZero
+    ) {
+      throw ExpPointException.of(
+        errorCode = ExpPointErrorCode.POINT_TEMPLATE_ISSUANCE_INVALID,
+        issuanceStartsAt,
+        issuanceEndsAt,
+        issuanceAmountType,
+        this.issuanceAmount.amount,
+        this.issuancePercentage?.value,
+        this.maxIssuanceAmount.amount,
+      )
+    }
+  }
+
   companion object {
     fun of(
       issuanceStartsAt: ZonedDateTime,
@@ -32,9 +61,10 @@ private constructor(
         issuanceStartsAt = issuanceStartsAt,
         issuanceEndsAt = issuanceEndsAt,
         issuanceAmountType = issuanceAmountType,
-        issuanceAmount = Money.of(issuanceAmount, issuanceCurrency),
-        issuancePercentage = issuancePercentage?.let { Percentage.of(it) },
-        maxIssuanceAmount = Money.of(maxIssuanceAmount, issuanceCurrency),
+        issuanceAmount = issuanceAmount,
+        issuancePercentage = issuancePercentage,
+        maxIssuanceAmount = maxIssuanceAmount,
+        issuanceCurrency = issuanceCurrency,
       )
     }
   }

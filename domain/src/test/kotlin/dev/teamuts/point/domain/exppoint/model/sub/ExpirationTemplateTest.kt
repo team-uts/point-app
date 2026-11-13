@@ -14,7 +14,7 @@ import org.junit.jupiter.params.provider.MethodSource
 
 class ExpirationTemplateTest {
   @ParameterizedTest
-  @MethodSource("provideInvalidExpirationInputs")
+  @MethodSource("provideInvalidExpirationCases")
   fun `throw exception when expiration setup is invalid`(
     expirationType: PointExpirationType,
     expirationPeriod: Int?,
@@ -33,7 +33,7 @@ class ExpirationTemplateTest {
   }
 
   @ParameterizedTest
-  @MethodSource("provideValidExpirationInputs")
+  @MethodSource("provideValidExpirationCases")
   fun `create expiration template instance`(testCase: ExpirationTemplateTestCase) {
     val expirationTemplate =
       ExpirationTemplate.of(
@@ -49,7 +49,7 @@ class ExpirationTemplateTest {
 
   companion object {
     @JvmStatic
-    fun provideInvalidExpirationInputs(): Stream<Arguments> {
+    fun provideInvalidExpirationCases(): Stream<Arguments> {
       return Stream.of(
         Arguments.arguments(PointExpirationType.FIXED, null, null),
         Arguments.arguments(
@@ -64,7 +64,7 @@ class ExpirationTemplateTest {
     }
 
     @JvmStatic
-    fun provideValidExpirationInputs(): Stream<Arguments> {
+    fun provideValidExpirationCases(): Stream<Arguments> {
       val validExpiresAt = AppTimeUtils.getNowTime().plusDays(1)
 
       return Stream.of(
