@@ -3,7 +3,7 @@ package dev.teamuts.point.app.common
 import dev.teamuts.shared.config.AppProfile
 import dev.teamuts.shared.http.logging.HttpLogMessage
 import dev.teamuts.shared.http.logging.RequestLogType
-import dev.teamuts.shared.utils.TimeUtils
+import dev.teamuts.shared.utils.AppTimeUtils
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
@@ -47,7 +47,7 @@ class ReqResLoggingFilter(
     filterChain.doFilter(requestWrapper, responseWrapper)
     val endTime: Long = System.currentTimeMillis()
 
-    val elapsedTime: Double = TimeUtils.convertMillisToSecWithPrecision(endTime - startTime)
+    val elapsedTime: Double = AppTimeUtils.convertMillisToSecWithPrecision(endTime - startTime)
 
     try {
       log.info {

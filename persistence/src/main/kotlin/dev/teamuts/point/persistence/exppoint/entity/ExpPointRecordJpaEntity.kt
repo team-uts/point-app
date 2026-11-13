@@ -1,13 +1,13 @@
 package dev.teamuts.point.persistence.exppoint.entity
 
 import dev.teamuts.point.domain.balance.constant.OwnerType
-import dev.teamuts.point.domain.common.constant.Currency
 import dev.teamuts.point.domain.exppoint.constant.ExpPointRecordStatus
 import dev.teamuts.point.domain.exppoint.model.ExpPointRecord
 import dev.teamuts.point.persistence.balance.entity.PointBalanceJpaEntity
 import dev.teamuts.point.persistence.balance.entity.PointBalanceTransactionJpaEntity
 import dev.teamuts.point.persistence.common.entity.BaseAuditableEntity
 import dev.teamuts.point.persistence.common.entity.EntityMetadata.Companion.PREFIX_INDEX
+import dev.teamuts.shared.domain.constant.Currency
 import jakarta.persistence.*
 import java.math.BigDecimal
 import java.time.ZonedDateTime

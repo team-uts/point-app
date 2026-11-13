@@ -3,9 +3,9 @@ package dev.teamuts.point.persistence.balance.entity
 import dev.teamuts.point.domain.balance.constant.OwnerType
 import dev.teamuts.point.domain.balance.constant.PointBalanceStatus
 import dev.teamuts.point.domain.balance.model.PointBalance
-import dev.teamuts.point.domain.common.constant.Currency
 import dev.teamuts.point.persistence.common.entity.BaseAuditableEntity
 import dev.teamuts.point.persistence.common.entity.EntityMetadata.Companion.PREFIX_UNIQUE
+import dev.teamuts.shared.domain.constant.Currency
 import jakarta.persistence.*
 import java.math.BigDecimal
 
@@ -18,8 +18,8 @@ private const val TABLE_ABBR = "pb"
   uniqueConstraints =
     [
       UniqueConstraint(
-        name = "${PREFIX_UNIQUE}_${TABLE_ABBR}_ownerid_ownertype_currency",
-        columnNames = ["owner_id", "owner_type", "currency"],
+        name = "${PREFIX_UNIQUE}_${TABLE_ABBR}_memberid_ownertype_currency",
+        columnNames = ["member_id", "owner_type", "currency"],
       )
     ],
 )

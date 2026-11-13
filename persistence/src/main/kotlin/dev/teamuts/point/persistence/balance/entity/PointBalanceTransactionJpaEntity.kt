@@ -3,9 +3,9 @@ package dev.teamuts.point.persistence.balance.entity
 import dev.teamuts.point.domain.balance.constant.BalanceOperationType
 import dev.teamuts.point.domain.balance.constant.BalanceTransactionType
 import dev.teamuts.point.domain.balance.model.PointBalanceTransaction
-import dev.teamuts.point.domain.common.constant.Currency
 import dev.teamuts.point.persistence.common.entity.BaseAuditableEntity
 import dev.teamuts.point.persistence.common.entity.EntityMetadata.Companion.PREFIX_INDEX
+import dev.teamuts.shared.domain.constant.Currency
 import jakarta.persistence.*
 import java.math.BigDecimal
 

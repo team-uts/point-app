@@ -1,11 +1,11 @@
 package dev.teamuts.point.domain.exppoint.model
 
 import dev.teamuts.point.domain.balance.constant.OwnerType
-import dev.teamuts.point.domain.common.annotation.DomainModel
-import dev.teamuts.point.domain.common.constant.Currency
-import dev.teamuts.point.domain.common.model.BaseIdentifiableModel
-import dev.teamuts.point.domain.common.model.Money
 import dev.teamuts.point.domain.exppoint.constant.ExpPointRecordStatus
+import dev.teamuts.shared.domain.annotation.DomainModel
+import dev.teamuts.shared.domain.constant.Currency
+import dev.teamuts.shared.domain.model.BaseIdentifiableModel
+import dev.teamuts.shared.domain.model.Money
 import java.math.BigDecimal
 import java.time.ZonedDateTime
 

@@ -121,13 +121,13 @@ class CommonControllerAdvice(
 
     if (appProfile.isLocal) {
       log.error(e.cause) {
-        "Code: ${e.errorCode.name()} / Exception: ${e.javaClass.getSimpleName()} / Msg: $logMessage /"
+        "Code: ${e.errorCode.name} / Exception: ${e.javaClass.getSimpleName()} / Msg: $logMessage"
       }
       return
     }
 
     log.error {
-      "Code: ${e.errorCode.name()} / Exception: ${e.javaClass.getSimpleName()} / Msg: $logMessage"
+      "Code: ${e.errorCode.name} / Exception: ${e.javaClass.getSimpleName()} / Msg: $logMessage"
     }
   }
 }
