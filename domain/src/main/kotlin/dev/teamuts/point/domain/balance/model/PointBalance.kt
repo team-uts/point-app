@@ -1,30 +1,37 @@
 package dev.teamuts.point.domain.balance.model
 
+import dev.teamuts.point.domain.balance.constant.BalanceOperationType
 import dev.teamuts.point.domain.balance.constant.OwnerType
 import dev.teamuts.point.domain.balance.constant.PointBalanceStatus
+import dev.teamuts.point.domain.balance.error.PointBalanceErrorCode
+import dev.teamuts.point.domain.balance.error.PointBalanceException
+import dev.teamuts.point.domain.balance.model.sub.PointBalanceAmount
+import dev.teamuts.point.domain.balance.model.sub.PointBalanceAmountDetails
+import dev.teamuts.point.domain.common.model.Point
 import dev.teamuts.shared.domain.annotation.DomainModel
 import dev.teamuts.shared.domain.constant.Currency
 import dev.teamuts.shared.domain.model.BaseIdentifiableModel
-import dev.teamuts.shared.domain.model.Money
 import java.math.BigDecimal
 
 @DomainModel
-class PointBalance(
+class PointBalance
+private constructor(
   id: Long = 0L,
-  memberId: Long,
-  ownerType: OwnerType,
-  amount: BigDecimal,
-  currency: Currency,
+  val memberId: Long,
+  val ownerType: OwnerType,
+  private val balanceAmount: PointBalanceAmount,
+  private var totalAmount: Point,
   status: PointBalanceStatus,
-) : BaseIdentifiableModel<Long>(id) {
-  val memberId: Long = memberId
+  lastTransactionId: Long?,
+) : BaseIdentifiableModel<Long>(id), PointBalanceAmountDetails by balanceAmount {
 
-  val ownerType: OwnerType = ownerType
-
-  private var amount: Money = Money.of(amount, currency)
+  var lastTransactionId: Long? = lastTransactionId
+    private set
 
   var status: PointBalanceStatus = status
     private set
+
+  val totalAmountValue: BigDecimal = totalAmount.value
 
   companion object {
     fun newActive(
@@ -35,9 +42,10 @@ class PointBalance(
       return PointBalance(
         memberId = memberId,
         ownerType = ownerType,
-        amount = BigDecimal.ZERO,
-        currency = currency,
+        balanceAmount = PointBalanceAmount.zero(currency),
+        totalAmount = Point.zero(currency),
         status = PointBalanceStatus.ACTIVE,
+        lastTransactionId = null,
       )
     }
 
@@ -45,26 +53,77 @@ class PointBalance(
       id: Long,
       memberId: Long,
       ownerType: OwnerType,
-      amount: BigDecimal,
+      cashAmount: BigDecimal,
+      expAmount: BigDecimal,
+      totalAmount: BigDecimal,
       currency: Currency,
       status: PointBalanceStatus,
+      lastTransactionId: Long?,
     ): PointBalance {
       return PointBalance(
         id = id,
         memberId = memberId,
         ownerType = ownerType,
-        amount = amount,
-        currency = currency,
+        balanceAmount =
+          PointBalanceAmount.of(
+            cashAmount = cashAmount,
+            expAmount = expAmount,
+            currency = currency,
+          ),
+        totalAmount = Point.of(totalAmount, currency),
         status = status,
+        lastTransactionId = lastTransactionId,
       )
     }
   }
 
-  fun getAmount(): BigDecimal {
-    return amount.amount
+  fun getValidAfterBalanceTotalAmount(
+    pointAmount: Point,
+    operationType: BalanceOperationType,
+  ): Point {
+    checkActivated()
+
+    val error =
+      PointBalanceException.of(
+        errorCode = PointBalanceErrorCode.INVALID_BALANCE_OPERATION,
+        totalAmount,
+        pointAmount,
+        operationType,
+      )
+
+    // check currency consistency
+    check(totalAmount.hasSameCurrency(pointAmount)) {
+      throw error
+    }
+
+    return try {
+      operationType.calculate(totalAmount, pointAmount)
+    } catch (_: Exception) {
+      throw error
+    }
   }
 
-  fun getCurrency(): Currency {
-    return amount.currency
+  fun updateBalanceAfterTransaction(pointTransaction: PointBalanceTransaction) {
+    checkActivated()
+    check(lastTransactionId == null || requireNotNull(lastTransactionId) < pointTransaction.id) {
+      throw PointBalanceException.of(
+        errorCode = PointBalanceErrorCode.INVALID_POINT_TRANSACTION_FOR_CALCULATION,
+        this.id,
+        pointTransaction.id,
+      )
+    }
+
+    lastTransactionId = pointTransaction.id
+  }
+
+  private fun checkActivated() {
+    checkPersisted()
+
+    check(status == PointBalanceStatus.ACTIVE) {
+      throw PointBalanceException.of(
+        errorCode = PointBalanceErrorCode.INVALID_STATUS,
+        status,
+      )
+    }
   }
 }

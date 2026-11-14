@@ -7,7 +7,8 @@ import dev.teamuts.shared.domain.model.Money
 import java.math.BigDecimal
 
 @DomainModel
-class ExpPointRecordMapping(
+class ExpPointRecordMapping
+private constructor(
   id: Long,
   pointTransactionId: Long,
   expPointRecordId: Long,

@@ -2,6 +2,7 @@ package dev.teamuts.point.persistence.balance.entity
 
 import dev.teamuts.point.domain.balance.constant.BalanceOperationType
 import dev.teamuts.point.domain.balance.constant.BalanceTransactionType
+import dev.teamuts.point.domain.balance.constant.OwnerType
 import dev.teamuts.point.domain.balance.model.PointBalanceTransaction
 import dev.teamuts.point.persistence.common.entity.BaseAuditableEntity
 import dev.teamuts.point.persistence.common.entity.EntityMetadata.Companion.PREFIX_INDEX
@@ -29,6 +30,7 @@ private const val TABLE_ABBR = "pbt"
 )
 class PointBalanceTransactionJpaEntity(
   balance: PointBalanceJpaEntity,
+  ownerType: OwnerType,
   transactionType: BalanceTransactionType,
   operationType: BalanceOperationType,
   cashAmount: BigDecimal,
@@ -47,6 +49,11 @@ class PointBalanceTransactionJpaEntity(
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "balance_id", nullable = false, comment = "point balance ID")
   var balance: PointBalanceJpaEntity = balance
+    protected set
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "owner_type", nullable = false, comment = "owner type")
+  var ownerType: OwnerType = ownerType
     protected set
 
   @Enumerated(EnumType.STRING)
@@ -110,12 +117,13 @@ class PointBalanceTransactionJpaEntity(
     ): PointBalanceTransactionJpaEntity {
       return PointBalanceTransactionJpaEntity(
         balance = balance,
+        ownerType = model.ownerType,
         transactionType = model.transactionType,
         operationType = model.operationType,
-        cashAmount = model.getCashAmount(),
-        expAmount = model.getExpAmount(),
-        afterBalanceAmount = model.getAfterBalanceAmount(),
-        currency = model.getCurrency(),
+        cashAmount = model.cashAmountValue,
+        expAmount = model.expAmountValue,
+        afterBalanceAmount = model.afterBalanceAmountValue,
+        currency = model.currency,
         paymentType = model.paymentType,
         payTransactionId = model.payTransactionId,
       )

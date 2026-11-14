@@ -18,6 +18,7 @@ class PointBalanceTransactionConverter {
     return PointBalanceTransaction.fromDatabase(
       id = entity.id,
       balanceId = entity.balance.id,
+      ownerType = entity.ownerType,
       transactionType = entity.transactionType,
       operationType = entity.operationType,
       cashAmount = entity.cashAmount,

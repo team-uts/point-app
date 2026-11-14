@@ -15,9 +15,12 @@ class PointBalanceConverter {
       id = entity.id,
       memberId = entity.memberId,
       ownerType = entity.ownerType,
-      amount = entity.amount,
+      cashAmount = entity.cashAmount,
+      expAmount = entity.expAmount,
+      totalAmount = entity.totalAmount,
       currency = entity.currency,
       status = entity.status,
+      lastTransactionId = entity.lastTransactionId,
     )
   }
 }

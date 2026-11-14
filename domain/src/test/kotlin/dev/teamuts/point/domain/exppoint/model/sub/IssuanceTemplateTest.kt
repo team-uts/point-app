@@ -60,9 +60,9 @@ class IssuanceTemplateTest {
     assertThat(issuanceTemplate.issuanceStartsAt).isEqualTo(issuanceStartsAt)
     assertThat(issuanceTemplate.issuanceEndsAt).isEqualTo(issuanceEndsAt)
     assertThat(issuanceTemplate.issuanceAmountType).isEqualTo(issuanceAmountType)
-    assertThat(issuanceTemplate.getIssuanceAmount())
-      .isEqualTo(issuanceAmountType.getAmountOrZero(issuanceAmount, issuanceCurrency).amount)
-    assertThat(issuanceTemplate.getIssuancePercentage())
+    assertThat(issuanceTemplate.issuanceAmountValue)
+      .isEqualTo(issuanceAmountType.getAmountOrZero(issuanceAmount, issuanceCurrency).value)
+    assertThat(issuanceTemplate.issuancePercentageValue)
       .isEqualTo(issuanceAmountType.getPercentageOrNull(issuancePercentage)?.value)
   }
 
@@ -107,7 +107,7 @@ class IssuanceTemplateTest {
         Arguments.arguments(
           IssuanceTemplateTestCase(
             issuanceAmountType = PointIssuanceAmountType.PERCENTAGE,
-            issuancePercentage = Percentage.HUNDRED.value,
+            issuancePercentage = Percentage.ONE_HUNDRED.value,
           )
         ),
         Arguments.arguments(IssuanceTemplateTestCase(maxIssuanceAmount = BigDecimal.ZERO)),

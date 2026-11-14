@@ -7,14 +7,16 @@ import java.time.ZonedDateTime
 
 interface IssuanceDetails {
   val issuanceStartsAt: ZonedDateTime
+
   val issuanceEndsAt: ZonedDateTime
+
   val issuanceAmountType: PointIssuanceAmountType
 
-  fun getIssuancePercentage(): BigDecimal?
+  val issuancePercentageValue: BigDecimal?
 
-  fun getIssuanceAmount(): BigDecimal
+  val issuanceAmountValue: BigDecimal
 
-  fun getIssuanceCurrency(): Currency
+  val issuanceCurrency: Currency
 
-  fun getMaxIssuanceAmount(): BigDecimal
+  val maxIssuanceAmountValue: BigDecimal
 }

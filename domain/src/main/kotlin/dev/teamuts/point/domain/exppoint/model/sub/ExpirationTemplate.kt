@@ -35,4 +35,12 @@ private constructor(
       )
     }
   }
+
+  fun calculateExpirationDate(baseDateTime: ZonedDateTime): ZonedDateTime {
+    if (expirationType == PointExpirationType.FIXED) {
+      return requireNotNull(expiresAt)
+    }
+
+    return expirationType.calculatePeriod(baseDateTime, requireNotNull(expirationPeriod))
+  }
 }

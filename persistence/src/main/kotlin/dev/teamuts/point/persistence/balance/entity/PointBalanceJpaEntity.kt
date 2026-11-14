@@ -26,9 +26,12 @@ private const val TABLE_ABBR = "pb"
 class PointBalanceJpaEntity(
   memberId: Long,
   ownerType: OwnerType,
-  amount: BigDecimal,
+  cashAmount: BigDecimal,
+  expAmount: BigDecimal,
+  totalAmount: BigDecimal,
   currency: Currency,
   status: PointBalanceStatus,
+  lastTransactionId: Long?,
 ) : BaseAuditableEntity() {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,13 +49,33 @@ class PointBalanceJpaEntity(
     protected set
 
   @Column(
-    name = "amount",
+    name = "cash_amount",
     nullable = false,
     precision = 15,
     scale = 2,
-    comment = "point balance amount",
+    comment = "cashable point amount",
   )
-  var amount: BigDecimal = amount
+  var cashAmount: BigDecimal = cashAmount
+    protected set
+
+  @Column(
+    name = "exp_amount",
+    nullable = false,
+    precision = 15,
+    scale = 2,
+    comment = "expirable point amount",
+  )
+  var expAmount: BigDecimal = expAmount
+    protected set
+
+  @Column(
+    name = "total_amount",
+    nullable = false,
+    precision = 15,
+    scale = 2,
+    comment = "total point amount",
+  )
+  var totalAmount: BigDecimal = totalAmount
     protected set
 
   @Enumerated(EnumType.STRING)
@@ -70,14 +93,21 @@ class PointBalanceJpaEntity(
   var status: PointBalanceStatus = status
     protected set
 
+  @Column(name = "last_transaction_id", nullable = true, comment = "last transaction ID")
+  var lastTransactionId: Long? = null
+    protected set
+
   companion object {
     fun of(model: PointBalance): PointBalanceJpaEntity {
       return PointBalanceJpaEntity(
         memberId = model.memberId,
         ownerType = model.ownerType,
-        amount = model.getAmount(),
-        currency = model.getCurrency(),
+        cashAmount = model.cashAmountValue,
+        expAmount = model.expAmountValue,
+        totalAmount = model.totalAmountValue,
+        currency = model.currency,
         status = model.status,
+        lastTransactionId = model.lastTransactionId,
       )
     }
   }

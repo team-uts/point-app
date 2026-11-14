@@ -1,16 +1,19 @@
 package dev.teamuts.point.app.api.dto
 
 import dev.teamuts.point.domain.exppoint.dto.app.ExpPointCommand
-import org.mapstruct.InjectionStrategy
-import org.mapstruct.Mapper
-import org.mapstruct.MappingConstants
-import org.mapstruct.ReportingPolicy
+import dev.teamuts.shared.domain.model.Money
+import org.mapstruct.*
 
 @Mapper(
   componentModel = MappingConstants.ComponentModel.SPRING,
   injectionStrategy = InjectionStrategy.CONSTRUCTOR,
   unmappedTargetPolicy = ReportingPolicy.ERROR,
+  imports = [Money::class],
 )
 interface ExpPointDtoMapper {
-  fun of(request: GrantExpPointsRequestDto): ExpPointCommand.GrantExpPoints
+  @Mapping(
+    target = "payAmount",
+    expression = "java(Money.of(request.getPayAmount(), request.getCurrency()))",
+  )
+  fun of(request: EarnExpPointsRequestDto): ExpPointCommand.EarnExpPoints
 }

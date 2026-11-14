@@ -1,7 +1,7 @@
 package dev.teamuts.point.app.api
 
+import dev.teamuts.point.app.api.dto.EarnExpPointsRequestDto
 import dev.teamuts.point.app.api.dto.ExpPointDtoMapper
-import dev.teamuts.point.app.api.dto.GrantExpPointsRequestDto
 import dev.teamuts.point.domain.exppoint.usecase.GrantExpPointsUseCase
 import dev.teamuts.shared.http.response.ApiCommonResponse
 import io.swagger.v3.oas.annotations.Operation
@@ -13,18 +13,23 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/v1/exp-points")
 class ExpPointApiController(
   private val expPointDtoMapper: ExpPointDtoMapper,
-  private val grantExpPointsUseCase: GrantExpPointsUseCase,
+  private val earnExpPointsUseCase: GrantExpPointsUseCase,
 ) {
-
-  @Operation(summary = "Grant Expirable Points", description = "Grant Expirable Points to a member")
-  @GetMapping("/grant")
+  @Operation(
+    summary = "Earn Expirable Points",
+    description = "Grant Earning Expirable Points to a member",
+  )
+  @GetMapping("/earn")
   fun grantExpirablePoints(
     @RequestParam memberId: Long,
-    @RequestBody request: GrantExpPointsRequestDto,
+    @RequestBody request: EarnExpPointsRequestDto,
   ): ApiCommonResponse<String> {
     val command = expPointDtoMapper.of(request)
 
-    grantExpPointsUseCase.execute(memberId, command)
+    earnExpPointsUseCase.execute(
+      memberId = memberId,
+      command = command,
+    )
 
     return ApiCommonResponse.success("ExpPointApiController test()")
   }

@@ -10,14 +10,23 @@ enum class PointExpirationType(
   },
   val getExpPeriodOrNull: (Int?) -> Int? = { t -> t },
   val getExpiresAtOrNull: (ZonedDateTime?) -> ZonedDateTime? = { _ -> null },
+  val calculatePeriod: (baseDateTime: ZonedDateTime, period: Int) -> ZonedDateTime,
 ) {
   FIXED(
     validate = { t -> t.expiresAt != null && t.expiresAt.isAfter(AppTimeUtils.getNowTime()) },
     getExpPeriodOrNull = { _ -> null },
     getExpiresAtOrNull = { t -> t },
+    calculatePeriod = { _, _ ->
+      throw IllegalStateException("FIXED expiration type does not support period calculation")
+    },
   ),
-  YEAR,
-  MONTH,
-  DAY,
-  HOUR,
+  YEAR(calculatePeriod = { b, p -> b.plusYears(p.toLong()) }),
+  MONTH(calculatePeriod = { b, p -> b.plusMonths(p.toLong()) }),
+  WEEK(calculatePeriod = { b, p -> b.plusWeeks(p.toLong()) }),
+  DAY(calculatePeriod = { b, p -> b.plusDays(p.toLong()) }),
+  HOUR(calculatePeriod = { b, p -> b.plusHours(p.toLong()) });
+
+  fun isFixed(): Boolean {
+    return this == FIXED
+  }
 }

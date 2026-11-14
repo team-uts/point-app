@@ -1,8 +1,10 @@
 package dev.teamuts.point.domain.exppoint.model.sub
 
+import dev.teamuts.point.domain.common.model.Point
 import dev.teamuts.point.domain.exppoint.constant.PointIssuanceAmountType
 import dev.teamuts.point.domain.exppoint.error.ExpPointErrorCode
 import dev.teamuts.point.domain.exppoint.error.ExpPointException
+import dev.teamuts.point.domain.exppoint.error.ExpPointIssuanceException
 import dev.teamuts.shared.domain.constant.Currency
 import dev.teamuts.shared.domain.model.Money
 import dev.teamuts.shared.domain.model.Percentage
@@ -15,34 +17,31 @@ private constructor(
   override val issuanceStartsAt: ZonedDateTime,
   override val issuanceEndsAt: ZonedDateTime,
   override val issuanceAmountType: PointIssuanceAmountType,
-  issuanceAmount: BigDecimal,
-  issuancePercentage: BigDecimal?,
-  maxIssuanceAmount: BigDecimal,
-  issuanceCurrency: Currency,
+  private val issuancePercentage: Percentage?,
+  private val issuanceAmount: Point,
+  private val maxIssuanceAmount: Point,
 ) : IssuanceDetails {
-  private val issuanceAmount: Money =
-    issuanceAmountType.getAmountOrZero(issuanceAmount, issuanceCurrency)
-
-  private val issuancePercentage: Percentage? =
-    issuanceAmountType.getPercentageOrNull(issuancePercentage)
-
-  private val maxIssuanceAmount: Money = Money.of(maxIssuanceAmount, issuanceCurrency)
+  override val issuancePercentageValue: BigDecimal? = issuancePercentage?.value
+  override val issuanceAmountValue: BigDecimal = issuanceAmount.value
+  override val issuanceCurrency: Currency = issuanceAmount.currency
+  override val maxIssuanceAmountValue: BigDecimal = maxIssuanceAmount.value
 
   init {
+    // validate instance
     check(
       issuanceEndsAt.isAfter(AppTimeUtils.getNowTime()) &&
         issuanceStartsAt.isBefore(issuanceEndsAt) &&
         issuanceAmountType.validate(this) &&
-        this.maxIssuanceAmount.isGreaterThanZero
+        this.maxIssuanceAmount.isGreaterThanZero()
     ) {
       throw ExpPointException.of(
         errorCode = ExpPointErrorCode.POINT_TEMPLATE_ISSUANCE_INVALID,
         issuanceStartsAt,
         issuanceEndsAt,
         issuanceAmountType,
-        this.issuanceAmount.amount,
+        this.issuanceAmount.value,
         this.issuancePercentage?.value,
-        this.maxIssuanceAmount.amount,
+        this.maxIssuanceAmount.value,
       )
     }
   }
@@ -61,35 +60,44 @@ private constructor(
         issuanceStartsAt = issuanceStartsAt,
         issuanceEndsAt = issuanceEndsAt,
         issuanceAmountType = issuanceAmountType,
-        issuanceAmount = issuanceAmount,
-        issuancePercentage = issuancePercentage,
-        maxIssuanceAmount = maxIssuanceAmount,
-        issuanceCurrency = issuanceCurrency,
+        issuanceAmount = issuanceAmountType.getAmountOrZero(issuanceAmount, issuanceCurrency),
+        issuancePercentage = issuanceAmountType.getPercentageOrNull(issuancePercentage),
+        maxIssuanceAmount = Point.of(maxIssuanceAmount, issuanceCurrency),
       )
     }
   }
 
-  override fun getIssuancePercentage(): BigDecimal? {
-    return issuancePercentage?.value
-  }
-
-  override fun getIssuanceAmount(): BigDecimal {
-    return issuanceAmount.amount
-  }
-
-  override fun getMaxIssuanceAmount(): BigDecimal {
-    return maxIssuanceAmount.amount
-  }
-
-  override fun getIssuanceCurrency(): Currency {
-    check(issuanceAmount.hasNotSameCurrency(maxIssuanceAmount)) {
-      throw ExpPointException.of(
-        errorCode = ExpPointErrorCode.POINT_TEMPLATE_ISSUANCE_CURRENCY_NOT_CONSISTENT,
-        issuanceAmount.currency,
-        maxIssuanceAmount.currency,
-      )
+  /**
+   * Calculates the issuance point amount based on the baseAmount and the issuance template
+   * configuration.
+   */
+  fun calculatePoint(baseAmount: Money): Point {
+    // validate baseAmount and currency consistency
+    check(
+      baseAmount.isGreaterThanZero &&
+        issuanceAmount.hasSameCurrency(baseAmount) &&
+        maxIssuanceAmount.hasSameCurrency(baseAmount)
+    ) {
+      throw ExpPointIssuanceException()
     }
 
-    return issuanceAmount.currency
+    // calculate issuance amount based on issuanceAmountType
+    return when (issuanceAmountType) {
+      PointIssuanceAmountType.FIXED -> issuanceAmount.copy()
+      PointIssuanceAmountType.PERCENTAGE -> {
+        Point.fromMoney(
+          baseAmount.multiplyByPercentage(
+            requireNotNull(issuancePercentage) {
+              throw ExpPointIssuanceException()
+            }
+          )
+        )
+      }
+    }.also { result ->
+      // check the maximum issuance amount constraint
+      check(result.isLessThanOrEqualTo(maxIssuanceAmount)) {
+        throw ExpPointIssuanceException()
+      }
+    }
   }
 }

@@ -1,6 +1,6 @@
 [versions]
 payment-convention = "0.2.0"
-payment-shared = "0.5.4"
+payment-shared = "0.5.8"
 
 java = "21"
 kotlin = "2.3.21"
