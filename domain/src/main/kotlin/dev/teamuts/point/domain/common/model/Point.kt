@@ -2,10 +2,11 @@ package dev.teamuts.point.domain.common.model
 
 import dev.teamuts.shared.domain.constant.Currency
 import dev.teamuts.shared.domain.model.Money
-import dev.teamuts.shared.domain.model.Percentage
 import java.math.BigDecimal
 
-/** Money with minus allowable (forced to be created with minus allowable) */
+/**
+ * Money with minus allowable (forced to be created with minus allowable). This class is immutable.
+ */
 class Point private constructor(private val amount: Money) {
   val value: BigDecimal = amount.amount
   val currency: Currency = amount.currency
@@ -44,6 +45,10 @@ class Point private constructor(private val amount: Money) {
     return amount.isGreaterThanZero
   }
 
+  fun isGreaterThan(other: Point): Boolean {
+    return amount.isGreaterThan(other.amount)
+  }
+
   fun isLessThanOrEqualTo(other: Point): Boolean {
     return amount.isLessThanOrEqualTo(other.amount)
   }
@@ -56,11 +61,27 @@ class Point private constructor(private val amount: Money) {
     return Point(amount.minus(other.amount))
   }
 
-  fun multiplyByPercentage(percentage: Percentage): Point {
-    return Point(amount.multiplyByPercentage(percentage))
+  /**
+   * Overrides equals and hashCode to compare Point objects based on their value and currency,
+   * rather than their reference.
+   */
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (other !is Point) return false
+
+    if (value != other.value) return false
+    if (currency != other.currency) return false
+
+    return true
   }
 
-  fun copy(): Point {
-    return Point(amount.copy())
+  override fun hashCode(): Int {
+    var result = value.hashCode()
+    result = 31 * result + currency.hashCode()
+    return result
+  }
+
+  override fun toString(): String {
+    return "Point(value=$value, currency=$currency)"
   }
 }

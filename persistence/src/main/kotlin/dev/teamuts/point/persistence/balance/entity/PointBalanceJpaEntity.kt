@@ -102,13 +102,20 @@ class PointBalanceJpaEntity(
       return PointBalanceJpaEntity(
         memberId = model.memberId,
         ownerType = model.ownerType,
-        cashAmount = model.cashAmountValue,
-        expAmount = model.expAmountValue,
-        totalAmount = model.totalAmountValue,
+        cashAmount = model.cashAmount.value,
+        expAmount = model.expAmount.value,
+        totalAmount = model.totalAmount.value,
         currency = model.currency,
         status = model.status,
         lastTransactionId = model.lastTransactionId,
       )
     }
+  }
+
+  fun updateBalanceAmountAndTransactionId(model: PointBalance) {
+    this.cashAmount = model.cashAmount.value
+    this.expAmount = model.expAmount.value
+    this.totalAmount = model.totalAmount.value
+    this.lastTransactionId = model.lastTransactionId
   }
 }

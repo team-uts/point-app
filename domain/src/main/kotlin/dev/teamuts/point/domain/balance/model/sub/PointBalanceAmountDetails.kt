@@ -1,12 +1,10 @@
 package dev.teamuts.point.domain.balance.model.sub
 
+import dev.teamuts.point.domain.common.model.Point
 import dev.teamuts.shared.domain.constant.Currency
-import java.math.BigDecimal
 
 interface PointBalanceAmountDetails {
-  val cashAmountValue: BigDecimal
-
-  val expAmountValue: BigDecimal
-
+  val cashAmount: Point
+  val expAmount: Point
   val currency: Currency
 }

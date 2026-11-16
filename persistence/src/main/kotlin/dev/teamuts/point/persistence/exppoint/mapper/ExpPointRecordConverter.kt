@@ -26,6 +26,7 @@ class ExpPointRecordConverter {
       balanceId = entity.balance.id,
       ownerType = entity.ownerType,
       pointTransactionId = entity.pointTransaction.id,
+      pointTemplateId = entity.pointTemplateId,
       totalAmount = entity.totalAmount,
       remainingAmount = entity.remainingAmount,
       currency = entity.currency,

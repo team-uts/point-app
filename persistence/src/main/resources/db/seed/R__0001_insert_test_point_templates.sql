@@ -1,0 +1,2 @@
+INSERT IGNORE INTO `point_templates` (template_name, ext_template_id, owner_type, is_active, issuance_starts_at, issuance_ends_at, issuance_amount_type, issuance_amount, issuance_percentage, max_issuance_amount, issuance_currency, expiration_type, expiration_period, expires_at, created_at, created_by, updated_at, updated_by)
+VALUES ('gold membership (test)', 'gold-membership', 'CUSTOMER', true, '2026-11-14 09:30:00.000000', '2026-11-20 09:00:00.000000', 'PERCENTAGE', 0, 15.50, 1000.00, 'AUD', 'FIXED', NULL, '2026-11-30 09:00:00.000000', now(), 'system', now(), 'system');

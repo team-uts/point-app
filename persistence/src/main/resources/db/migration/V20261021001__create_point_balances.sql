@@ -9,9 +9,9 @@ CREATE TABLE IF NOT EXISTS `point_balances`
     currency                CHAR(3)             NOT NULL COMMENT 'currency type (AUD)',
     status                  VARCHAR(32)         NOT NULL COMMENT 'balance status',
     last_transaction_id     BIGINT UNSIGNED     NULL COMMENT 'last transaction ID',
-    created_at              DATETIME(6)         NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    created_at              DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
     created_by              VARCHAR(30)         NOT NULL COMMENT 'creator',
-    updated_at              DATETIME(6)         NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+    updated_at              DATETIME            NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     updated_by              VARCHAR(30)         NULL COMMENT 'updater'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

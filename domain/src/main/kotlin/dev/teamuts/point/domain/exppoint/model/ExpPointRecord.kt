@@ -18,8 +18,9 @@ private constructor(
   val balanceId: Long,
   val ownerType: OwnerType,
   val pointTransactionId: Long,
-  private val totalAmount: Point,
-  private val remainingAmount: Point,
+  val pointTemplateId: Long,
+  val totalAmount: Point,
+  val remainingAmount: Point,
   val expiresAt: ZonedDateTime,
   expiredAt: ZonedDateTime?,
   status: ExpPointRecordStatus,
@@ -30,8 +31,6 @@ private constructor(
   var status: ExpPointRecordStatus = status
     private set
 
-  val totalAmountValue: BigDecimal = totalAmount.value
-  val remainingAmountValue: BigDecimal = remainingAmount.value
   val currency: Currency = totalAmount.currency
 
   companion object {
@@ -43,16 +42,9 @@ private constructor(
         balanceId = pointTransaction.balanceId,
         ownerType = pointTransaction.ownerType,
         pointTransactionId = pointTransaction.id,
-        totalAmount =
-          Point.of(
-            amount = pointTransaction.expAmountValue,
-            currency = pointTransaction.currency,
-          ),
-        remainingAmount =
-          Point.of(
-            amount = pointTransaction.expAmountValue,
-            currency = pointTransaction.currency,
-          ),
+        pointTemplateId = pointTemplate.id,
+        totalAmount = pointTransaction.expAmount,
+        remainingAmount = pointTransaction.expAmount,
         expiresAt = pointTemplate.calculateExpirationDate(baseDateTime = AppTimeUtils.getNowTime()),
         expiredAt = null,
         status = ExpPointRecordStatus.ACTIVE,
@@ -64,6 +56,7 @@ private constructor(
       balanceId: Long,
       ownerType: OwnerType,
       pointTransactionId: Long,
+      pointTemplateId: Long,
       totalAmount: BigDecimal,
       remainingAmount: BigDecimal,
       currency: Currency,
@@ -76,6 +69,7 @@ private constructor(
         balanceId = balanceId,
         ownerType = ownerType,
         pointTransactionId = pointTransactionId,
+        pointTemplateId = pointTemplateId,
         totalAmount = Point.of(amount = totalAmount, currency = currency),
         remainingAmount = Point.of(amount = remainingAmount, currency = currency),
         expiresAt = expiresAt,

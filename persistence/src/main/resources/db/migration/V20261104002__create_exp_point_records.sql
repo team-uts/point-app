@@ -8,8 +8,8 @@ CREATE TABLE IF NOT EXISTS `exp_point_records`
     total_amount            DECIMAL(15, 2)      NOT NULL COMMENT 'total point amount',
     remaining_amount        DECIMAL(15, 2)      NOT NULL COMMENT 'remaining point amount after usage',
     currency                CHAR(3)             NOT NULL COMMENT 'currency type (AUD)',
-    expires_at              DATETIME(6)         NOT NULL COMMENT 'point expiration date',
-    expired_at              DATETIME(6)         NULL COMMENT 'point expired date',
+    expires_at              DATETIME            NOT NULL COMMENT 'point expiration date',
+    expired_at              DATETIME            NULL COMMENT 'point expired date',
     status                  VARCHAR(32)         NOT NULL COMMENT 'point record status',
     created_at              DATETIME(6)         NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
     created_by              VARCHAR(30)         NOT NULL COMMENT 'creator',
@@ -18,3 +18,4 @@ CREATE TABLE IF NOT EXISTS `exp_point_records`
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE INDEX ix_epr_balanceid ON exp_point_records (balance_id);
+CREATE INDEX ix_epr_expiresat ON exp_point_records (expires_at);

@@ -19,11 +19,13 @@ private constructor(
   id: Long = 0L,
   val memberId: Long,
   val ownerType: OwnerType,
-  private val balanceAmount: PointBalanceAmount,
-  private var totalAmount: Point,
+  private var balanceAmount: PointBalanceAmount,
+  totalAmount: Point,
   status: PointBalanceStatus,
   lastTransactionId: Long?,
-) : BaseIdentifiableModel<Long>(id), PointBalanceAmountDetails by balanceAmount {
+) : BaseIdentifiableModel<Long>(id), PointBalanceAmountDetails {
+  var totalAmount: Point = totalAmount
+    private set
 
   var lastTransactionId: Long? = lastTransactionId
     private set
@@ -31,7 +33,14 @@ private constructor(
   var status: PointBalanceStatus = status
     private set
 
-  val totalAmountValue: BigDecimal = totalAmount.value
+  override val cashAmount: Point
+    get() = balanceAmount.cashAmount
+
+  override val expAmount: Point
+    get() = balanceAmount.expAmount
+
+  override val currency: Currency
+    get() = balanceAmount.currency
 
   companion object {
     fun newActive(
@@ -77,8 +86,9 @@ private constructor(
     }
   }
 
-  fun getValidAfterBalanceTotalAmount(
-    pointAmount: Point,
+  /** @return current balance total amount + new balance amount */
+  fun getValidBalanceTotalAmount(
+    newBalanceAmount: PointBalanceAmount,
     operationType: BalanceOperationType,
   ): Point {
     checkActivated()
@@ -87,32 +97,50 @@ private constructor(
       PointBalanceException.of(
         errorCode = PointBalanceErrorCode.INVALID_BALANCE_OPERATION,
         totalAmount,
-        pointAmount,
+        newBalanceAmount,
         operationType,
       )
 
     // check currency consistency
-    check(totalAmount.hasSameCurrency(pointAmount)) {
+    check(totalAmount.currency == newBalanceAmount.currency) {
       throw error
     }
 
     return try {
-      operationType.calculate(totalAmount, pointAmount)
+      operationType.calculate(totalAmount, newBalanceAmount.getTotalPoint())
     } catch (_: Exception) {
       throw error
     }
   }
 
+  /**
+   * Updates the balance amount and total amount based on the provided point transaction.
+   *
+   * @param pointTransaction The newly created point transaction to apply to the balance.
+   */
   fun updateBalanceAfterTransaction(pointTransaction: PointBalanceTransaction) {
     checkActivated()
-    check(lastTransactionId == null || requireNotNull(lastTransactionId) < pointTransaction.id) {
-      throw PointBalanceException.of(
-        errorCode = PointBalanceErrorCode.INVALID_POINT_TRANSACTION_FOR_CALCULATION,
-        this.id,
-        pointTransaction.id,
-      )
-    }
 
+    // check the last transaction ID to ensure the transaction is applied in order
+    checkPointTransactionApplicable(pointTransaction)
+
+    // update the balance amount based on the transaction
+    balanceAmount = pointTransaction.calculateNewBalanceAmount(balanceAmount)
+    println("updated balanceAmount: $balanceAmount")
+    // update the total amount based on the transaction
+    totalAmount =
+      balanceAmount.getTotalPoint().also {
+        // check the after balance amount is consistent with the calculated total amount
+        check(pointTransaction.isSameAfterBalanceAmount(it)) {
+          throw PointBalanceException.of(
+            errorCode = PointBalanceErrorCode.INVALID_POINT_TRANSACTION_FOR_CALCULATION,
+            this.id,
+            pointTransaction.id,
+          )
+        }
+      }
+
+    // update the last transaction ID
     lastTransactionId = pointTransaction.id
   }
 
@@ -124,6 +152,18 @@ private constructor(
         errorCode = PointBalanceErrorCode.INVALID_STATUS,
         status,
       )
+    }
+  }
+
+  private fun checkPointTransactionApplicable(pointTransaction: PointBalanceTransaction) {
+    lastTransactionId.also {
+      check(it == null || it < pointTransaction.id) {
+        throw PointBalanceException.of(
+          errorCode = PointBalanceErrorCode.INVALID_POINT_TRANSACTION_FOR_CALCULATION,
+          this.id,
+          pointTransaction.id,
+        )
+      }
     }
   }
 }

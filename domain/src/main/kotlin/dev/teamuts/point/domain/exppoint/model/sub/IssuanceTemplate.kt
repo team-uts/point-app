@@ -21,16 +21,22 @@ private constructor(
   private val issuanceAmount: Point,
   private val maxIssuanceAmount: Point,
 ) : IssuanceDetails {
-  override val issuancePercentageValue: BigDecimal? = issuancePercentage?.value
-  override val issuanceAmountValue: BigDecimal = issuanceAmount.value
-  override val issuanceCurrency: Currency = issuanceAmount.currency
-  override val maxIssuanceAmountValue: BigDecimal = maxIssuanceAmount.value
+  override val issuancePercentageValue: BigDecimal?
+    get() = issuancePercentage?.value
+
+  override val issuanceAmountValue: BigDecimal
+    get() = issuanceAmount.value
+
+  override val issuanceCurrency: Currency
+    get() = issuanceAmount.currency
+
+  override val maxIssuanceAmountValue: BigDecimal
+    get() = maxIssuanceAmount.value
 
   init {
     // validate instance
     check(
-      issuanceEndsAt.isAfter(AppTimeUtils.getNowTime()) &&
-        issuanceStartsAt.isBefore(issuanceEndsAt) &&
+      issuanceStartsAt.isBefore(issuanceEndsAt) &&
         issuanceAmountType.validate(this) &&
         this.maxIssuanceAmount.isGreaterThanZero()
     ) {
@@ -81,23 +87,34 @@ private constructor(
       throw ExpPointIssuanceException()
     }
 
-    // calculate issuance amount based on issuanceAmountType
-    return when (issuanceAmountType) {
-      PointIssuanceAmountType.FIXED -> issuanceAmount.copy()
-      PointIssuanceAmountType.PERCENTAGE -> {
-        Point.fromMoney(
-          baseAmount.multiplyByPercentage(
-            requireNotNull(issuancePercentage) {
-              throw ExpPointIssuanceException()
-            }
-          )
-        )
-      }
-    }.also { result ->
-      // check the maximum issuance amount constraint
-      check(result.isLessThanOrEqualTo(maxIssuanceAmount)) {
+    // validate issuance period
+    AppTimeUtils.getNowTime().also { nowTime ->
+      check(nowTime.isAfter(issuanceStartsAt) && nowTime.isBefore(issuanceEndsAt)) {
         throw ExpPointIssuanceException()
       }
     }
+
+    // calculate issuance amount based on issuanceAmountType
+    val result =
+      when (issuanceAmountType) {
+        PointIssuanceAmountType.FIXED -> issuanceAmount
+        PointIssuanceAmountType.PERCENTAGE -> {
+          Point.fromMoney(
+            money =
+              baseAmount.multiplyByPercentage(
+                requireNotNull(issuancePercentage) {
+                  throw ExpPointIssuanceException()
+                }
+              )
+          )
+        }
+      }
+
+    // check the maximum issuance amount
+    if (result.isGreaterThan(maxIssuanceAmount)) {
+      return maxIssuanceAmount
+    }
+
+    return result
   }
 }

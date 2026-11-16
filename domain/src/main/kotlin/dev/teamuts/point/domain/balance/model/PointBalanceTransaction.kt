@@ -20,14 +20,12 @@ private constructor(
   val transactionType: BalanceTransactionType,
   val operationType: BalanceOperationType,
   private val balanceAmount: PointBalanceAmount,
-  private val afterBalanceAmount: Point,
+  val afterBalanceAmount: Point,
   val paymentType: String?,
   val payTransactionId: String?,
 ) : BaseIdentifiableModel<Long>(id), PointBalanceAmountDetails by balanceAmount {
-  val afterBalanceAmountValue: BigDecimal = afterBalanceAmount.value
-
   companion object {
-    fun earnExpPoints(
+    fun earnPoints(
       pointBalance: PointBalance,
       earningPoint: Point,
       paymentType: String?,
@@ -35,20 +33,22 @@ private constructor(
     ): PointBalanceTransaction {
       val operationType = BalanceOperationType.CREDIT
 
+      val balanceAmount =
+        PointBalanceAmount.of(
+          cashAmount = BigDecimal.ZERO,
+          expAmount = earningPoint.value,
+          currency = earningPoint.currency,
+        )
+
       return PointBalanceTransaction(
         balanceId = pointBalance.id,
         ownerType = pointBalance.ownerType,
         transactionType = BalanceTransactionType.EARN,
         operationType = operationType,
-        balanceAmount =
-          PointBalanceAmount.of(
-            cashAmount = BigDecimal.ZERO,
-            expAmount = earningPoint.value,
-            currency = earningPoint.currency,
-          ),
+        balanceAmount = balanceAmount,
         afterBalanceAmount =
-          pointBalance.getValidAfterBalanceTotalAmount(
-            pointAmount = earningPoint,
+          pointBalance.getValidBalanceTotalAmount(
+            newBalanceAmount = balanceAmount,
             operationType = operationType,
           ),
         paymentType = paymentType,
@@ -89,9 +89,10 @@ private constructor(
   }
 
   fun calculateNewBalanceAmount(balanceAmount: PointBalanceAmount): PointBalanceAmount {
-    return when (operationType) {
-      BalanceOperationType.CREDIT -> balanceAmount.credit(this.balanceAmount)
-      BalanceOperationType.DEBIT -> balanceAmount.debit(this.balanceAmount)
-    }
+    return operationType.calculateBalanceAmount(balanceAmount, this.balanceAmount)
+  }
+
+  fun isSameAfterBalanceAmount(point: Point): Boolean {
+    return point == afterBalanceAmount
   }
 }

@@ -24,7 +24,7 @@ class PointBalanceTransactionService(
     val issuancePoint = pointTemplate.calculateIssuancePoint(baseAmount = payAmount)
 
     val earnPointTransaction =
-      PointBalanceTransaction.earnExpPoints(
+      PointBalanceTransaction.earnPoints(
         pointBalance = pointBalance,
         earningPoint = issuancePoint,
         paymentType = paymentType,

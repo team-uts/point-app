@@ -6,7 +6,6 @@ import dev.teamuts.point.domain.balance.port.PointBalanceReaderPort
 import dev.teamuts.point.persistence.balance.mapper.PointBalanceConverter
 import dev.teamuts.point.persistence.balance.repository.PointBalanceRepository
 import dev.teamuts.point.persistence.common.annotation.PersistenceAdapter
-import dev.teamuts.shared.data.PersistenceErrorCode
 import dev.teamuts.shared.data.PersistenceException
 import dev.teamuts.shared.domain.constant.Currency
 
@@ -15,11 +14,11 @@ class PointBalanceReaderAdapter(
   private val pointBalanceRepository: PointBalanceRepository,
   private val pointBalanceConverter: PointBalanceConverter,
 ) : PointBalanceReaderPort {
-  override fun retrieveByUnique(
+  override fun retrieveOrNullByUnique(
     memberId: Long,
     ownerType: OwnerType,
     currency: Currency,
-  ): PointBalance {
+  ): PointBalance? {
     return pointBalanceRepository
       .findByMemberIdAndOwnerTypeAndCurrency(
         memberId = memberId,
@@ -29,9 +28,11 @@ class PointBalanceReaderAdapter(
       ?.let { entity ->
         pointBalanceConverter.convertToDomainModel(entity)
       }
-      ?: throw PersistenceException.of(
-        PersistenceErrorCode.NOT_FOUND,
-        "PointBalance not found for memberId: $memberId, ownerType: $ownerType, currency: $currency",
-      )
+  }
+
+  override fun retrieveByIdWithLock(balanceId: Long): PointBalance {
+    return pointBalanceRepository.findWithLockById(balanceId)?.let { entity ->
+      pointBalanceConverter.convertToDomainModel(entity)
+    } ?: throw PersistenceException.notFound(PointBalance::class.java, balanceId)
   }
 }

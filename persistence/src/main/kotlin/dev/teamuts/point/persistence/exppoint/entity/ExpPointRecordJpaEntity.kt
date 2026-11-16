@@ -23,13 +23,18 @@ private const val TABLE_ABBR = "epr"
       Index(
         name = "${PREFIX_INDEX}_${TABLE_ABBR}_balanceid",
         columnList = "balance_id",
-      )
+      ),
+      Index(
+        name = "${PREFIX_INDEX}_${TABLE_ABBR}_expiresat",
+        columnList = "expires_at",
+      ),
     ],
 )
 class ExpPointRecordJpaEntity(
   balance: PointBalanceJpaEntity,
   ownerType: OwnerType,
   pointTransaction: PointBalanceTransactionJpaEntity,
+  pointTemplateId: Long,
   totalAmount: BigDecimal,
   remainingAmount: BigDecimal,
   currency: Currency,
@@ -44,12 +49,17 @@ class ExpPointRecordJpaEntity(
     protected set
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "balance_id", nullable = false, comment = "point balance ID")
+  @JoinColumn(
+    name = "balance_id",
+    nullable = false,
+    updatable = false,
+    comment = "point balance ID",
+  )
   var balance: PointBalanceJpaEntity = balance
     protected set
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "owner_type", nullable = false, comment = "owner type")
+  @Column(name = "owner_type", nullable = false, updatable = false, comment = "owner type")
   var ownerType: OwnerType = ownerType
     protected set
 
@@ -60,6 +70,15 @@ class ExpPointRecordJpaEntity(
     comment = "point balance transaction ID",
   )
   var pointTransaction: PointBalanceTransactionJpaEntity = pointTransaction
+    protected set
+
+  @Column(
+    name = "point_template_id",
+    nullable = false,
+    updatable = false,
+    comment = "point template ID",
+  )
+  var pointTemplateId: Long = pointTemplateId
     protected set
 
   @Column(
@@ -115,8 +134,9 @@ class ExpPointRecordJpaEntity(
         balance = balance,
         ownerType = model.ownerType,
         pointTransaction = pointTransaction,
-        totalAmount = model.totalAmountValue,
-        remainingAmount = model.remainingAmountValue,
+        pointTemplateId = model.pointTemplateId,
+        totalAmount = model.totalAmount.value,
+        remainingAmount = model.remainingAmount.value,
         currency = model.currency,
         expiresAt = model.expiresAt,
         expiredAt = model.expiredAt,

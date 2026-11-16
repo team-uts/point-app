@@ -5,6 +5,7 @@ import dev.teamuts.point.persistence.common.constant.DataSourceConstants.APPLICA
 import dev.teamuts.point.persistence.common.constant.JpaConstants.APP_ENTITY_MANAGER
 import dev.teamuts.point.persistence.common.constant.JpaConstants.APP_JPA_QUERY_FACTORY
 import dev.teamuts.shared.data.TransactionConstants.APP_TRANSACTION_MANAGER
+import dev.teamuts.shared.utils.AppTimeUtils
 import jakarta.persistence.EntityManager
 import java.util.*
 import javax.sql.DataSource
@@ -15,6 +16,7 @@ import org.springframework.boot.jpa.autoconfigure.JpaProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
+import org.springframework.data.auditing.DateTimeProvider
 import org.springframework.data.domain.AuditorAware
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
@@ -22,7 +24,10 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter
 
 @Configuration(proxyBeanMethods = false)
-@EnableJpaAuditing
+@EnableJpaAuditing(
+  auditorAwareRef = "auditorProvider",
+  dateTimeProviderRef = "auditingDateTimeProvider",
+)
 @EnableJpaRepositories(
   basePackages = ["dev.teamuts.point.persistence.**.repository"],
   entityManagerFactoryRef = APP_ENTITY_MANAGER,
@@ -64,9 +69,12 @@ class JpaConfig(
   }
 
   @Bean
-  fun auditorProvider(): AuditorAware<String> {
-    return AuditorAware {
-      Optional.of(SYSTEM)
-    }
+  fun auditorProvider(): AuditorAware<String> = AuditorAware {
+    Optional.of(SYSTEM)
+  }
+
+  @Bean
+  fun auditingDateTimeProvider(): DateTimeProvider = DateTimeProvider {
+    Optional.of(AppTimeUtils.getNowTime())
   }
 }

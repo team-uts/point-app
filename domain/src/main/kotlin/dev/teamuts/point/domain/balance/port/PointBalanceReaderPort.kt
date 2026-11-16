@@ -5,5 +5,11 @@ import dev.teamuts.point.domain.balance.model.PointBalance
 import dev.teamuts.shared.domain.constant.Currency
 
 interface PointBalanceReaderPort {
-  fun retrieveByUnique(memberId: Long, ownerType: OwnerType, currency: Currency): PointBalance
+  fun retrieveOrNullByUnique(
+    memberId: Long,
+    ownerType: OwnerType,
+    currency: Currency,
+  ): PointBalance?
+
+  fun retrieveByIdWithLock(balanceId: Long): PointBalance
 }
