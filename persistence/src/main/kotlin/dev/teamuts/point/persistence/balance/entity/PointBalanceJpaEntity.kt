@@ -4,7 +4,7 @@ import dev.teamuts.point.domain.balance.constant.OwnerType
 import dev.teamuts.point.domain.balance.constant.PointBalanceStatus
 import dev.teamuts.point.domain.balance.model.PointBalance
 import dev.teamuts.point.persistence.common.entity.BaseAuditableEntity
-import dev.teamuts.point.persistence.common.entity.EntityMetadata.Companion.PREFIX_UNIQUE
+import dev.teamuts.shared.data.constant.DatabaseNaming.PREFIX_UNIQUE
 import dev.teamuts.shared.domain.constant.Currency
 import jakarta.persistence.*
 import java.math.BigDecimal

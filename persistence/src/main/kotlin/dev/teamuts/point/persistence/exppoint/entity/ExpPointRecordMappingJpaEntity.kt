@@ -3,7 +3,7 @@ package dev.teamuts.point.persistence.exppoint.entity
 import dev.teamuts.point.domain.exppoint.model.ExpPointRecordMapping
 import dev.teamuts.point.persistence.balance.entity.PointBalanceTransactionJpaEntity
 import dev.teamuts.point.persistence.common.entity.BaseCreationEntity
-import dev.teamuts.point.persistence.common.entity.EntityMetadata.Companion.PREFIX_INDEX
+import dev.teamuts.shared.data.constant.DatabaseNaming.PREFIX_INDEX
 import dev.teamuts.shared.domain.constant.Currency
 import jakarta.persistence.*
 import java.math.BigDecimal
