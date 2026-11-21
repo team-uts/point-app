@@ -7,8 +7,8 @@ import dev.teamuts.point.persistence.balance.mapper.PointBalanceTransactionConve
 import dev.teamuts.point.persistence.balance.repository.PointBalanceRepository
 import dev.teamuts.point.persistence.balance.repository.PointBalanceTransactionRepository
 import dev.teamuts.point.persistence.common.annotation.PersistenceAdapter
-import dev.teamuts.shared.data.AppTransactional
 import dev.teamuts.shared.data.PersistenceException
+import dev.teamuts.shared.data.annotation.AppTransactional
 import org.springframework.data.repository.findByIdOrNull
 
 @PersistenceAdapter

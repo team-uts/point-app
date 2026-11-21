@@ -3,7 +3,7 @@ package dev.teamuts.point.domain.balance.facade
 import dev.teamuts.point.domain.balance.constant.OwnerType
 import dev.teamuts.point.domain.balance.model.PointBalance
 import dev.teamuts.point.domain.balance.service.PointBalanceService
-import dev.teamuts.shared.data.AppTransactional
+import dev.teamuts.shared.data.annotation.AppTransactional
 import dev.teamuts.shared.domain.constant.Currency
 import org.springframework.stereotype.Service
 

@@ -52,10 +52,10 @@ class CommonControllerAdvice(
                   "detail": "An unexpected error occurred. Please try again later.",
                   `"instance": "/v1/exp-points/12345"
                   }
-                  """
-              )
+                  """,
+              ),
             ],
-        )
+        ),
       ],
   )
   @ExceptionHandler(Exception::class)
@@ -96,10 +96,10 @@ class CommonControllerAdvice(
                       "message": "Order (extOrderNum: {0}) does not belong to member (memberId: {1})."
                     }
                   }
-                  """
-              )
+                  """,
+              ),
             ],
-        )
+        ),
       ],
   )
   @ResponseStatus(HttpStatus.OK)

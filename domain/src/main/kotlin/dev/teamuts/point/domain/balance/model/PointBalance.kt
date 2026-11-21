@@ -27,10 +27,10 @@ private constructor(
   var totalAmount: Point = totalAmount
     private set
 
-  var lastTransactionId: Long? = lastTransactionId
+  var status: PointBalanceStatus = status
     private set
 
-  var status: PointBalanceStatus = status
+  var lastTransactionId: Long? = lastTransactionId
     private set
 
   override val cashAmount: Point

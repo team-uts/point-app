@@ -4,7 +4,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory
 import dev.teamuts.point.persistence.common.constant.DataSourceConstants.APPLICATION_DATA_SOURCE
 import dev.teamuts.point.persistence.common.constant.JpaConstants.APP_ENTITY_MANAGER
 import dev.teamuts.point.persistence.common.constant.JpaConstants.APP_JPA_QUERY_FACTORY
-import dev.teamuts.shared.data.TransactionConstants.APP_TRANSACTION_MANAGER
+import dev.teamuts.shared.data.constant.TransactionConstants.APP_TRANSACTION_MANAGER
 import dev.teamuts.shared.utils.AppTimeUtils
 import jakarta.persistence.EntityManager
 import java.util.*
@@ -44,7 +44,7 @@ class JpaConfig(
   @Primary
   @Bean(APP_ENTITY_MANAGER)
   fun appEntityManager(
-    @Qualifier(APPLICATION_DATA_SOURCE) applicationDataSource: DataSource
+    @Qualifier(APPLICATION_DATA_SOURCE) applicationDataSource: DataSource,
   ): LocalContainerEntityManagerFactoryBean {
     val mergedJpaProperties =
       Properties().apply {
@@ -63,7 +63,7 @@ class JpaConfig(
 
   @Bean(APP_JPA_QUERY_FACTORY)
   fun jpaQueryFactory(
-    @Qualifier(APP_ENTITY_MANAGER) appEntityManager: EntityManager
+    @Qualifier(APP_ENTITY_MANAGER) appEntityManager: EntityManager,
   ): JPAQueryFactory {
     return JPAQueryFactory(appEntityManager)
   }

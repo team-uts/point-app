@@ -75,7 +75,7 @@ class ExpirationTemplateTest {
             expiresAt = validExpiresAt,
             expectedExpPeriod = null,
             expectedExpiresAt = validExpiresAt,
-          )
+          ),
         ),
         Arguments.arguments(
           ExpirationTemplateTestCase(
@@ -84,7 +84,7 @@ class ExpirationTemplateTest {
             expiresAt = validExpiresAt,
             expectedExpPeriod = null,
             expectedExpiresAt = validExpiresAt,
-          )
+          ),
         ),
         Arguments.arguments(
           ExpirationTemplateTestCase(
@@ -93,7 +93,7 @@ class ExpirationTemplateTest {
             expiresAt = AppTimeUtils.getNowTime().minusDays(3),
             expectedExpPeriod = 3,
             expectedExpiresAt = null,
-          )
+          ),
         ),
         Arguments.arguments(
           ExpirationTemplateTestCase(
@@ -102,7 +102,7 @@ class ExpirationTemplateTest {
             expiresAt = null,
             expectedExpPeriod = 1,
             expectedExpiresAt = null,
-          )
+          ),
         ),
         Arguments.arguments(
           ExpirationTemplateTestCase(
@@ -111,7 +111,7 @@ class ExpirationTemplateTest {
             expiresAt = null,
             expectedExpPeriod = 6,
             expectedExpiresAt = null,
-          )
+          ),
         ),
       )
     }

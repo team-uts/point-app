@@ -6,7 +6,7 @@ import dev.teamuts.point.domain.balance.model.PointBalanceTransaction
 import dev.teamuts.point.domain.balance.port.PointBalanceReaderPort
 import dev.teamuts.point.domain.balance.port.PointBalanceStorePort
 import dev.teamuts.point.domain.balance.port.PointBalanceUpdatePort
-import dev.teamuts.shared.data.AppTransactional
+import dev.teamuts.shared.data.annotation.AppTransactional
 import dev.teamuts.shared.domain.constant.Currency
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
@@ -47,7 +47,7 @@ class PointBalanceService(
           memberId = memberId,
           ownerType = ownerType,
           currency = currency,
-        )
+        ),
       )
   }
 

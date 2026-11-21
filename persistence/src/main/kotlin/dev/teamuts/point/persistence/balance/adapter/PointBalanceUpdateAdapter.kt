@@ -5,9 +5,9 @@ import dev.teamuts.point.domain.balance.port.PointBalanceUpdatePort
 import dev.teamuts.point.persistence.balance.entity.PointBalanceJpaEntity
 import dev.teamuts.point.persistence.balance.repository.PointBalanceRepository
 import dev.teamuts.point.persistence.common.annotation.PersistenceAdapter
-import dev.teamuts.shared.data.AppTransactional
 import dev.teamuts.shared.data.PersistenceException
-import dev.teamuts.shared.data.lock.RequireEntityLock
+import dev.teamuts.shared.data.annotation.AppTransactional
+import dev.teamuts.shared.data.annotation.RequireEntityLock
 import org.springframework.data.repository.findByIdOrNull
 
 @PersistenceAdapter

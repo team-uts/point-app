@@ -74,41 +74,41 @@ class IssuanceTemplateTest {
           IssuanceTemplateTestCase(
             issuanceStartsAt = AppTimeUtils.getNowTime().plusDays(1),
             issuanceEndsAt = AppTimeUtils.getNowTime(),
-          )
+          ),
         ),
         Arguments.arguments(
-          IssuanceTemplateTestCase(issuanceEndsAt = AppTimeUtils.getNowTime().minusDays(2))
+          IssuanceTemplateTestCase(issuanceEndsAt = AppTimeUtils.getNowTime().minusDays(2)),
         ),
         Arguments.arguments(
           IssuanceTemplateTestCase(
             issuanceAmountType = PointIssuanceAmountType.FIXED,
             issuanceAmount = BigDecimal.ZERO,
-          )
+          ),
         ),
         Arguments.arguments(
           IssuanceTemplateTestCase(
             issuanceAmountType = PointIssuanceAmountType.FIXED,
             issuanceAmount = BigDecimal("100"),
             maxIssuanceAmount = BigDecimal("50"),
-          )
+          ),
         ),
         Arguments.arguments(
           IssuanceTemplateTestCase(
             issuanceAmountType = PointIssuanceAmountType.PERCENTAGE,
             issuancePercentage = null,
-          )
+          ),
         ),
         Arguments.arguments(
           IssuanceTemplateTestCase(
             issuanceAmountType = PointIssuanceAmountType.PERCENTAGE,
             issuancePercentage = BigDecimal.ZERO,
-          )
+          ),
         ),
         Arguments.arguments(
           IssuanceTemplateTestCase(
             issuanceAmountType = PointIssuanceAmountType.PERCENTAGE,
             issuancePercentage = Percentage.ONE_HUNDRED.value,
-          )
+          ),
         ),
         Arguments.arguments(IssuanceTemplateTestCase(maxIssuanceAmount = BigDecimal.ZERO)),
       )
@@ -121,20 +121,20 @@ class IssuanceTemplateTest {
           IssuanceTemplateTestCase(
             issuanceStartsAt = AppTimeUtils.getNowTime().plusDays(1),
             issuanceEndsAt = AppTimeUtils.getNowTime().plusDays(2),
-          )
+          ),
         ),
         Arguments.arguments(
           IssuanceTemplateTestCase(
             issuanceAmountType = PointIssuanceAmountType.FIXED,
             issuanceAmount = BigDecimal("100"),
             maxIssuanceAmount = BigDecimal("150"),
-          )
+          ),
         ),
         Arguments.arguments(
           IssuanceTemplateTestCase(
             issuanceAmountType = PointIssuanceAmountType.PERCENTAGE,
             issuancePercentage = BigDecimal("50"),
-          )
+          ),
         ),
         Arguments.arguments(IssuanceTemplateTestCase(maxIssuanceAmount = BigDecimal("1000"))),
       )

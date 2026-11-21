@@ -5,7 +5,7 @@ import dev.teamuts.point.domain.balance.port.PointBalanceStorePort
 import dev.teamuts.point.persistence.balance.mapper.PointBalanceConverter
 import dev.teamuts.point.persistence.balance.repository.PointBalanceRepository
 import dev.teamuts.point.persistence.common.annotation.PersistenceAdapter
-import dev.teamuts.shared.data.AppTransactional
+import dev.teamuts.shared.data.annotation.AppTransactional
 
 @PersistenceAdapter
 @AppTransactional

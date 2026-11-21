@@ -6,7 +6,7 @@ import dev.teamuts.point.domain.balance.service.PointBalanceTransactionService
 import dev.teamuts.point.domain.exppoint.dto.app.ExpPointCommand
 import dev.teamuts.point.domain.exppoint.service.ExpPointRecordService
 import dev.teamuts.point.domain.exppoint.service.PointTemplateService
-import dev.teamuts.shared.data.AppTransactional
+import dev.teamuts.shared.data.annotation.AppTransactional
 import org.springframework.stereotype.Service
 
 @Service

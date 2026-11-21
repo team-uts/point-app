@@ -38,7 +38,7 @@ private constructor(
     check(
       issuanceStartsAt.isBefore(issuanceEndsAt) &&
         issuanceAmountType.validate(this) &&
-        this.maxIssuanceAmount.isGreaterThanZero()
+        this.maxIssuanceAmount.isGreaterThanZero(),
     ) {
       throw ExpPointException.of(
         errorCode = ExpPointErrorCode.POINT_TEMPLATE_ISSUANCE_INVALID,
@@ -82,7 +82,7 @@ private constructor(
     check(
       baseAmount.isGreaterThanZero &&
         issuanceAmount.hasSameCurrency(baseAmount) &&
-        maxIssuanceAmount.hasSameCurrency(baseAmount)
+        maxIssuanceAmount.hasSameCurrency(baseAmount),
     ) {
       throw ExpPointIssuanceException()
     }
@@ -104,8 +104,8 @@ private constructor(
               baseAmount.multiplyByPercentage(
                 requireNotNull(issuancePercentage) {
                   throw ExpPointIssuanceException()
-                }
-              )
+                },
+              ),
           )
         }
       }

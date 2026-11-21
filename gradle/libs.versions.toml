@@ -1,6 +1,6 @@
 [versions]
 payment-convention = "0.2.0"
-payment-shared = "0.6.4"
+payment-shared = "0.8.2"
 
 java = "21"
 kotlin = "2.3.21"
@@ -16,7 +16,7 @@ querydsl = "5.1.0"
 mapstruct = "1.6.3"
 flywaydb = "13.2.0"
 
-spotless = "8.10.3"
+spotless = "8.10.4"
 
 easyRandom = "6.0.1"
 mockito = "5.23.0"
@@ -49,6 +49,8 @@ spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-
 spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-starter-security" }
 spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
 spring-boot-starter-data-jpa-test = { module = "org.springframework.boot:spring-boot-starter-data-jpa-test" }
+spring-boot-starter-data-redis = { module = "org.springframework.boot:spring-boot-starter-data-redis" }
+spring-boot-starter-kafka = { module = "org.springframework.boot:spring-boot-starter-kafka" }
 
 spring-boot-h2console = { module = "org.springframework.boot:spring-boot-h2console" }
 

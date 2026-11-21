@@ -5,7 +5,7 @@ import dev.teamuts.point.domain.balance.service.PointBalanceService
 import dev.teamuts.point.domain.exppoint.dto.app.ExpPointCommand
 import dev.teamuts.point.domain.exppoint.dto.app.ExpPointInfo
 import dev.teamuts.point.domain.exppoint.facade.ExpPointFacade
-import dev.teamuts.shared.data.AppTransactional
+import dev.teamuts.shared.data.annotation.AppTransactional
 import dev.teamuts.shared.domain.annotation.UseCase
 
 @UseCase

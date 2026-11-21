@@ -20,7 +20,7 @@ private const val TABLE_ABBR = "pb"
       UniqueConstraint(
         name = "${PREFIX_UNIQUE}_${TABLE_ABBR}_memberid_ownertype_currency",
         columnNames = ["member_id", "owner_type", "currency"],
-      )
+      ),
     ],
 )
 class PointBalanceJpaEntity(

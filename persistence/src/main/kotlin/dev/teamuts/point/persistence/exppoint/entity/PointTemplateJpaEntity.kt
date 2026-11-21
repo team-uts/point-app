@@ -22,7 +22,7 @@ private const val TABLE_ABBR = "pt"
       UniqueConstraint(
         name = "${PREFIX_UNIQUE}_${TABLE_ABBR}_exttemplateid_ownertype",
         columnNames = ["ext_template_id", "owner_type"],
-      )
+      ),
     ],
 )
 class PointTemplateJpaEntity(

@@ -20,7 +20,7 @@ class AppRequestMatcherHolder(
       AppRequestMatcher.noneRoleOf(
         /* urlPattern = */ "${actuatorProperties.basePath}/**",
         /* httpMethod = */ HttpMethod.GET,
-      )
+      ),
     )
 
   private val swaggerUrls: AppRequestMatchers =

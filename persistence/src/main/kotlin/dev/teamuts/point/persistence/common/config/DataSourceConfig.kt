@@ -27,7 +27,7 @@ class DataSourceConfig(private val dataSourceProperties: CustomDataSourcePropert
   @Primary
   @Bean(APPLICATION_DATA_SOURCE)
   fun applicationDataSource(
-    @Qualifier(ROUTING_DATA_SOURCE) routingDataSource: DataSource
+    @Qualifier(ROUTING_DATA_SOURCE) routingDataSource: DataSource,
   ): DataSource {
     return LazyConnectionDataSourceProxy(routingDataSource)
   }
@@ -66,7 +66,7 @@ class DataSourceConfig(private val dataSourceProperties: CustomDataSourcePropert
   class RoutingDataSource : AbstractRoutingDataSource() {
     override fun determineCurrentLookupKey(): Any {
       return DbType.valueOfReadOnly(
-          readOnly = TransactionSynchronizationManager.isCurrentTransactionReadOnly()
+          readOnly = TransactionSynchronizationManager.isCurrentTransactionReadOnly(),
         )
         .also {
           log.debug { "Routing DataSource: $it" }
